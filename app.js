@@ -6,8 +6,11 @@ const listings = [
     price: 22000,
     state: "Nuevo León",
     location: "Monterrey, Nuevo León",
-    condition: "Usada",
-    image: "https://picsum.photos/600/400?1"
+    condition: "Demo / No disponible",
+    image: "https://picsum.photos/600/400?1",
+    description: "Anuncio demo para probar cómo se vería una guitarra publicada en Gear México.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
   },
   {
     title: "Ibanez RG550 Genesis",
@@ -16,8 +19,11 @@ const listings = [
     price: 18500,
     state: "Jalisco",
     location: "Guadalajara, Jalisco",
-    condition: "Usada",
-    image: "https://picsum.photos/600/400?2"
+    condition: "Demo / No disponible",
+    image: "https://picsum.photos/600/400?2",
+    description: "Anuncio demo para probar fotos, descripción y contacto.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
   },
   {
     title: "Marshall JCM2000",
@@ -26,8 +32,11 @@ const listings = [
     price: 16000,
     state: "CDMX",
     location: "CDMX",
-    condition: "Usado",
-    image: "https://picsum.photos/600/400?3"
+    condition: "Demo / No disponible",
+    image: "https://picsum.photos/600/400?3",
+    description: "Anuncio demo de amplificador.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
   },
   {
     title: "Boss SD-1 Super OverDrive",
@@ -36,28 +45,11 @@ const listings = [
     price: 1200,
     state: "Coahuila",
     location: "Saltillo, Coahuila",
-    condition: "Usado",
-    image: "https://picsum.photos/600/400?4"
-  },
-  {
-    title: "Jackson Dinky DK2M",
-    category: "Guitarras",
-    brand: "Jackson",
-    price: 14500,
-    state: "Estado de México",
-    location: "Toluca, Estado de México",
-    condition: "Usada",
-    image: "https://picsum.photos/600/400?5"
-  },
-  {
-    title: "ESP LTD EC-1000",
-    category: "Guitarras",
-    brand: "ESP",
-    price: 17500,
-    state: "Querétaro",
-    location: "Querétaro, Querétaro",
-    condition: "Usada",
-    image: "https://picsum.photos/600/400?6"
+    condition: "Demo / No disponible",
+    image: "https://picsum.photos/600/400?4",
+    description: "Anuncio demo de pedal.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
   }
 ];
 
@@ -66,25 +58,30 @@ const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
 const stateFilter = document.getElementById("stateFilter");
 const resultsCount = document.getElementById("resultsCount");
+const singleListing = document.getElementById("singleListing");
 
 function renderListings(data) {
+  if (!listingsGrid) return;
+
   listingsGrid.innerHTML = "";
 
-  resultsCount.textContent =
-    data.length === 1
-      ? "1 anuncio encontrado"
-      : `${data.length} anuncios encontrados`;
+  if (resultsCount) {
+    resultsCount.textContent =
+      data.length === 1
+        ? "1 anuncio encontrado"
+        : `${data.length} anuncios encontrados`;
+  }
 
   if (data.length === 0) {
     listingsGrid.innerHTML = `
-      <div class="empty">
-        No se encontraron anuncios.
-      </div>
+      <div class="empty">No se encontraron anuncios.</div>
     `;
     return;
   }
 
   data.forEach(item => {
+    const originalIndex = listings.indexOf(item);
+
     const card = document.createElement("div");
     card.className = "card";
 
@@ -93,14 +90,13 @@ function renderListings(data) {
 
       <div class="card-content">
         <h3>${item.title}</h3>
-
         <p class="price">$${item.price.toLocaleString()} MXN</p>
-
         <p>${item.location}</p>
-
         <p>${item.condition}</p>
 
-        <a href="#">Ver anuncio</a>
+        <a href="anuncio.html?id=${originalIndex}">
+          Ver anuncio
+        </a>
       </div>
     `;
 
@@ -138,23 +134,77 @@ function filterListings() {
   renderListings(filtered);
 }
 
+function renderSingleListing() {
+  if (!singleListing) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const id = parseInt(params.get("id"));
+  const item = listings[id];
+
+  if (!item) {
+    singleListing.innerHTML = `
+      <div class="empty">No se encontró este anuncio.</div>
+    `;
+    return;
+  }
+
+  singleListing.innerHTML = `
+    <div class="card single-card">
+      <img src="${item.image}" alt="${item.title}">
+
+      <div class="card-content">
+        <h1>${item.title}</h1>
+
+        <p class="price">$${item.price.toLocaleString()} MXN</p>
+
+        <p><strong>Ubicación:</strong> ${item.location}</p>
+        <p><strong>Categoría:</strong> ${item.category}</p>
+        <p><strong>Marca:</strong> ${item.brand}</p>
+        <p><strong>Condición:</strong> ${item.condition}</p>
+
+        <br>
+
+        <p>${item.description}</p>
+
+        <br>
+
+        <a href="${item.facebook}" target="_blank">
+          Contactar en Facebook
+        </a>
+
+        <a href="${item.marketplace}" target="_blank">
+          Ver publicación original
+        </a>
+      </div>
+    </div>
+  `;
+}
+
 let searchTimer;
 
-searchInput.addEventListener("input", function () {
-  clearTimeout(searchTimer);
+if (searchInput) {
+  searchInput.addEventListener("input", function () {
+    clearTimeout(searchTimer);
 
-  searchTimer = setTimeout(function () {
-    filterListings();
-  }, 250);
-});
+    searchTimer = setTimeout(function () {
+      filterListings();
+    }, 250);
+  });
 
-searchInput.addEventListener("keydown", function (event) {
-  if (event.key === "Enter") {
-    filterListings();
-  }
-});
+  searchInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      filterListings();
+    }
+  });
+}
 
-categoryFilter.addEventListener("change", filterListings);
-stateFilter.addEventListener("change", filterListings);
+if (categoryFilter) {
+  categoryFilter.addEventListener("change", filterListings);
+}
+
+if (stateFilter) {
+  stateFilter.addEventListener("change", filterListings);
+}
 
 renderListings(listings);
+renderSingleListing();
