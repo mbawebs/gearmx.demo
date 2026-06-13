@@ -269,6 +269,20 @@ const sortFilter = document.getElementById("sortFilter");
 const resultsCount = document.getElementById("resultsCount");
 const singleListing = document.getElementById("singleListing");
 
+function getExtraImages(baseImage) {
+  const dotIndex = baseImage.lastIndexOf(".");
+  const name = baseImage.substring(0, dotIndex);
+  const ext = baseImage.substring(dotIndex);
+
+  return [
+    baseImage,
+    `${name}-1${ext}`,
+    `${name}-2${ext}`,
+    `${name}-3${ext}`,
+    `${name}-4${ext}`
+  ];
+}
+
 function openImageModal(src) {
   let modal = document.getElementById("imageModal");
 
@@ -303,21 +317,10 @@ function sortListings(data) {
   const sortValue = sortFilter.value;
   const sorted = [...data];
 
-  if (sortValue === "az") {
-    sorted.sort((a, b) => a.title.localeCompare(b.title));
-  }
-
-  if (sortValue === "za") {
-    sorted.sort((a, b) => b.title.localeCompare(a.title));
-  }
-
-  if (sortValue === "high") {
-    sorted.sort((a, b) => b.price - a.price);
-  }
-
-  if (sortValue === "low") {
-    sorted.sort((a, b) => a.price - b.price);
-  }
+  if (sortValue === "az") sorted.sort((a, b) => a.title.localeCompare(b.title));
+  if (sortValue === "za") sorted.sort((a, b) => b.title.localeCompare(a.title));
+  if (sortValue === "high") sorted.sort((a, b) => b.price - a.price);
+  if (sortValue === "low") sorted.sort((a, b) => a.price - b.price);
 
   return sorted;
 }
@@ -326,7 +329,6 @@ function renderListings(data) {
   if (!listingsGrid) return;
 
   listingsGrid.innerHTML = "";
-
   const finalData = sortListings(data);
 
   if (resultsCount) {
@@ -366,9 +368,9 @@ function renderListings(data) {
 }
 
 function filterListings() {
-  const searchText = searchInput.value.toLowerCase().trim();
-  const selectedCategory = categoryFilter.value;
-  const selectedState = stateFilter.value;
+  const searchText = searchInput ? searchInput.value.toLowerCase().trim() : "";
+  const selectedCategory = categoryFilter ? categoryFilter.value : "";
+  const selectedState = stateFilter ? stateFilter.value : "";
 
   const filtered = listings.filter(item => {
     const searchableText = `
@@ -381,11 +383,11 @@ function filterListings() {
       ${item.description}
     `.toLowerCase();
 
-    const matchesSearch = searchText === "" || searchableText.includes(searchText);
-    const matchesCategory = selectedCategory === "" || item.category === selectedCategory;
-    const matchesState = selectedState === "" || item.state === selectedState;
-
-    return matchesSearch && matchesCategory && matchesState;
+    return (
+      (searchText === "" || searchableText.includes(searchText)) &&
+      (selectedCategory === "" || item.category === selectedCategory) &&
+      (selectedState === "" || item.state === selectedState)
+    );
   });
 
   renderListings(filtered);
@@ -403,9 +405,21 @@ function renderSingleListing() {
     return;
   }
 
+  const galleryImages = getExtraImages(item.image);
+
   singleListing.innerHTML = `
     <div class="card single-card">
-      <img class="main-listing-image" src="${item.image}" alt="${item.title}">
+      <div class="listing-gallery">
+        <img class="main-listing-image" src="${item.image}" alt="${item.title}">
+
+        <div class="thumbnail-row">
+          ${galleryImages.map((img, index) => `
+            <button class="thumbnail-btn ${index === 0 ? "active" : ""}" type="button" data-image="${img}">
+              <img src="${img}" alt="${item.title} foto ${index + 1}" onerror="this.closest('.thumbnail-btn').remove()">
+            </button>
+          `).join("")}
+        </div>
+      </div>
 
       <div class="card-content">
         <h1>${item.title}</h1>
@@ -429,9 +443,21 @@ function renderSingleListing() {
   `;
 
   const mainImage = singleListing.querySelector(".main-listing-image");
+  const thumbnails = singleListing.querySelectorAll(".thumbnail-btn");
+
+  thumbnails.forEach(button => {
+    button.addEventListener("click", function () {
+      const newImage = button.dataset.image;
+
+      mainImage.src = newImage;
+
+      thumbnails.forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
+    });
+  });
 
   mainImage.addEventListener("click", function () {
-    openImageModal(item.image);
+    openImageModal(mainImage.src);
   });
 }
 
@@ -450,17 +476,9 @@ if (searchInput) {
   });
 }
 
-if (categoryFilter) {
-  categoryFilter.addEventListener("change", filterListings);
-}
-
-if (stateFilter) {
-  stateFilter.addEventListener("change", filterListings);
-}
-
-if (sortFilter) {
-  sortFilter.addEventListener("change", filterListings);
-}
+if (categoryFilter) categoryFilter.addEventListener("change", filterListings);
+if (stateFilter) stateFilter.addEventListener("change", filterListings);
+if (sortFilter) sortFilter.addEventListener("change", filterListings);
 
 renderListings(listings);
 renderSingleListing();
