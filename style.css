@@ -476,3 +476,44 @@ body {
     height: 74px;
   }
 }
+.page-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) 220px;
+  gap: 24px;
+  align-items: start;
+}
+
+.ad-box {
+  width: 220px;
+  max-width: 220px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.ad-box img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 14px;
+}
+
+.content-area {
+  min-width: 0;
+}
+
+@media (max-width: 1000px) {
+  .page-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .ad-box {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .left-ad,
+  .right-ad {
+    display: none;
+  }
+}
