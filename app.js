@@ -265,6 +265,7 @@ const listingsGrid = document.getElementById("listingsGrid");
 const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
 const stateFilter = document.getElementById("stateFilter");
+const sortFilter = document.getElementById("sortFilter");
 const resultsCount = document.getElementById("resultsCount");
 const singleListing = document.getElementById("singleListing");
 
@@ -275,12 +276,10 @@ function openImageModal(src) {
     modal = document.createElement("div");
     modal.id = "imageModal";
     modal.className = "image-modal";
-
     modal.innerHTML = `
       <button class="close-modal" type="button">×</button>
       <img src="" alt="Imagen ampliada">
     `;
-
     document.body.appendChild(modal);
 
     modal.querySelector(".close-modal").addEventListener("click", function () {
@@ -298,37 +297,67 @@ function openImageModal(src) {
   modal.classList.add("open");
 }
 
+function sortListings(data) {
+  if (!sortFilter) return data;
+
+  const sortValue = sortFilter.value;
+  const sorted = [...data];
+
+  if (sortValue === "az") {
+    sorted.sort((a, b) => a.title.localeCompare(b.title));
+  }
+
+  if (sortValue === "za") {
+    sorted.sort((a, b) => b.title.localeCompare(a.title));
+  }
+
+  if (sortValue === "high") {
+    sorted.sort((a, b) => b.price - a.price);
+  }
+
+  if (sortValue === "low") {
+    sorted.sort((a, b) => a.price - b.price);
+  }
+
+  return sorted;
+}
+
 function renderListings(data) {
   if (!listingsGrid) return;
 
   listingsGrid.innerHTML = "";
 
+  const finalData = sortListings(data);
+
   if (resultsCount) {
     resultsCount.textContent =
-      data.length === 1
+      finalData.length === 1
         ? "1 anuncio encontrado"
-        : `${data.length} anuncios encontrados`;
+        : `${finalData.length} anuncios encontrados`;
   }
 
-  if (data.length === 0) {
+  if (finalData.length === 0) {
     listingsGrid.innerHTML = `<div class="empty">No se encontraron anuncios.</div>`;
     return;
   }
 
-  data.forEach(item => {
+  finalData.forEach(item => {
     const originalIndex = listings.indexOf(item);
 
     const card = document.createElement("div");
-    card.className = "card";
+    card.className = "card clickable-card";
+    card.onclick = function () {
+      window.location.href = `anuncio.html?id=${originalIndex}`;
+    };
 
     card.innerHTML = `
+      <div class="card-accent"></div>
       <img src="${item.image}" alt="${item.title}">
       <div class="card-content">
         <h3>${item.title}</h3>
         <p class="price">$${item.price.toLocaleString()} MXN</p>
         <p>${item.location}</p>
         <p>${item.condition}</p>
-        <a href="anuncio.html?id=${originalIndex}">Ver anuncio</a>
       </div>
     `;
 
@@ -411,10 +440,7 @@ let searchTimer;
 if (searchInput) {
   searchInput.addEventListener("input", function () {
     clearTimeout(searchTimer);
-
-    searchTimer = setTimeout(function () {
-      filterListings();
-    }, 250);
+    searchTimer = setTimeout(filterListings, 250);
   });
 
   searchInput.addEventListener("keydown", function (event) {
@@ -430,6 +456,10 @@ if (categoryFilter) {
 
 if (stateFilter) {
   stateFilter.addEventListener("change", filterListings);
+}
+
+if (sortFilter) {
+  sortFilter.addEventListener("change", filterListings);
 }
 
 renderListings(listings);
