@@ -1,519 +1,466 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+const listings = [
+  {
+    title: "Charvel Fusion Special MIJ 1990",
+    category: "Guitarras",
+    brand: "Charvel",
+    price: 22000,
+    state: "Nuevo León",
+    location: "Monterrey, Nuevo León",
+    condition: "Demo / No disponible",
+    image: "images/charvel-fusion-red.png",
+    description: "Charvel Fusion estilo noventero, configuración shred, tremolo tipo Floyd y look rojo clásico. Anuncio demo para probar la plataforma.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Ibanez RG550 Verde Neon",
+    category: "Guitarras",
+    brand: "Ibanez",
+    price: 18500,
+    state: "Jalisco",
+    location: "Guadalajara, Jalisco",
+    condition: "Demo / No disponible",
+    image: "images/ibanez-rg550-green.png",
+    description: "Ibanez RG estilo shred, color verde llamativo, perfecta para probar cómo se vería una publicación de guitarra.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Jackson Soloist Azul Metálica",
+    category: "Guitarras",
+    brand: "Jackson",
+    price: 19500,
+    state: "CDMX",
+    location: "CDMX",
+    condition: "Demo / No disponible",
+    image: "images/jackson-soloist-blue.png",
+    description: "Jackson Soloist demo con acabado azul metálico, estilo metal moderno.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "ESP LTD MH Morada",
+    category: "Guitarras",
+    brand: "ESP",
+    price: 17500,
+    state: "Querétaro",
+    location: "Querétaro, Querétaro",
+    condition: "Demo / No disponible",
+    image: "images/esp-mh-purple.png",
+    description: "ESP LTD estilo superstrat, acabado morado. Anuncio demo para probar imagen, precio y contacto.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Charvel San Dimas Bubblegum Pink",
+    category: "Guitarras",
+    brand: "Charvel",
+    price: 24000,
+    state: "Nuevo León",
+    location: "San Pedro Garza García, Nuevo León",
+    condition: "Demo / No disponible",
+    image: "images/charvel-san-dimas-pink.png",
+    description: "Charvel San Dimas estilo ochentero en rosa bubblegum. Demo visual para Gear México.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Marshall JCM2000 DSL",
+    category: "Amplificadores",
+    brand: "Marshall",
+    price: 16000,
+    state: "CDMX",
+    location: "CDMX",
+    condition: "Demo / No disponible",
+    image: "images/marshall-jcm2000.png",
+    description: "Cabezal Marshall JCM2000 demo. Ideal para probar publicaciones de amplificadores.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Mesa Boogie Dual Rectifier",
+    category: "Amplificadores",
+    brand: "Mesa Boogie",
+    price: 42000,
+    state: "Baja California",
+    location: "Tijuana, Baja California",
+    condition: "Demo / No disponible",
+    image: "images/mesa-dual-rectifier.png",
+    description: "Dual Rectifier demo para sonidos high gain. Publicación de prueba.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "EVH 5150 III",
+    category: "Amplificadores",
+    brand: "EVH",
+    price: 28500,
+    state: "Sonora",
+    location: "Hermosillo, Sonora",
+    condition: "Demo / No disponible",
+    image: "images/5150-iii.png",
+    description: "EVH 5150 III demo para sección de amplificadores high gain.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Orange Rockerverb",
+    category: "Amplificadores",
+    brand: "Orange",
+    price: 35000,
+    state: "Puebla",
+    location: "Puebla, Puebla",
+    condition: "Demo / No disponible",
+    image: "images/orange-rockerverb.png",
+    description: "Orange Rockerverb demo. Prueba de publicación para amplificador boutique.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Boss SD-1 Super OverDrive",
+    category: "Pedales",
+    brand: "Boss",
+    price: 1200,
+    state: "Coahuila",
+    location: "Saltillo, Coahuila",
+    condition: "Demo / No disponible",
+    image: "images/boss-sd1.png",
+    description: "Boss SD-1 demo para probar publicaciones de pedales.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Ibanez Tube Screamer",
+    category: "Pedales",
+    brand: "Ibanez",
+    price: 2300,
+    state: "Guanajuato",
+    location: "León, Guanajuato",
+    condition: "Demo / No disponible",
+    image: "images/tube-screamer.png",
+    description: "Tube Screamer demo, pedal clásico para overdrive.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Boss Chorus Ensemble",
+    category: "Pedales",
+    brand: "Boss",
+    price: 1800,
+    state: "Yucatán",
+    location: "Mérida, Yucatán",
+    condition: "Demo / No disponible",
+    image: "images/boss-chorus.png",
+    description: "Boss Chorus demo para sección de efectos.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "MXR Phase 90",
+    category: "Pedales",
+    brand: "MXR",
+    price: 1600,
+    state: "Veracruz",
+    location: "Veracruz, Veracruz",
+    condition: "Demo / No disponible",
+    image: "images/mxr-phase90.png",
+    description: "MXR Phase 90 demo para probar anuncios de pedales compactos.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "ProCo RAT Distortion",
+    category: "Pedales",
+    brand: "ProCo",
+    price: 2100,
+    state: "Sinaloa",
+    location: "Culiacán, Sinaloa",
+    condition: "Demo / No disponible",
+    image: "images/proco-rat.png",
+    description: "ProCo RAT demo para sonidos distorsionados clásicos.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Floyd Rose Gold",
+    category: "Partes",
+    brand: "Floyd Rose",
+    price: 4500,
+    state: "Nuevo León",
+    location: "Monterrey, Nuevo León",
+    condition: "Demo / No disponible",
+    image: "images/floyd-rose-gold.png",
+    description: "Puente estilo Floyd Rose dorado. Demo para probar sección de partes.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Seymour Duncan JB",
+    category: "Partes",
+    brand: "Seymour Duncan",
+    price: 1900,
+    state: "Jalisco",
+    location: "Zapopan, Jalisco",
+    condition: "Demo / No disponible",
+    image: "images/seymour-duncan-jb.png",
+    description: "Pickup Seymour Duncan JB demo para categoría de partes.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "DiMarzio Super Distortion",
+    category: "Partes",
+    brand: "DiMarzio",
+    price: 1700,
+    state: "CDMX",
+    location: "CDMX",
+    condition: "Demo / No disponible",
+    image: "images/dimarzio-super-distortion.png",
+    description: "Pickup DiMarzio Super Distortion demo.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "EVH D-Tuna",
+    category: "Partes",
+    brand: "EVH",
+    price: 950,
+    state: "Chihuahua",
+    location: "Chihuahua, Chihuahua",
+    condition: "Demo / No disponible",
+    image: "images/evh-d-tuna.png",
+    description: "EVH D-Tuna demo para accesorios y partes.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Music Man StingRay",
+    category: "Bajos",
+    brand: "Music Man",
+    price: 32000,
+    state: "Michoacán",
+    location: "Morelia, Michoacán",
+    condition: "Demo / No disponible",
+    image: "images/musicman-stingray.png",
+    description: "Music Man StingRay demo para categoría de bajos.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  },
+  {
+    title: "Fender Jazz Bass",
+    category: "Bajos",
+    brand: "Fender",
+    price: 26000,
+    state: "Tamaulipas",
+    location: "Tampico, Tamaulipas",
+    condition: "Demo / No disponible",
+    image: "images/fender-jazz-bass.png",
+    description: "Fender Jazz Bass demo para probar anuncios de bajos.",
+    facebook: "https://facebook.com",
+    marketplace: "https://facebook.com/marketplace"
+  }
+];
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f4f4f4;
-  color: #222;
-}
+const listingsGrid = document.getElementById("listingsGrid");
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+const stateFilter = document.getElementById("stateFilter");
+const sortFilter = document.getElementById("sortFilter");
+const resultsCount = document.getElementById("resultsCount");
+const singleListing = document.getElementById("singleListing");
 
-.container {
-  width: 95%;
-  max-width: 1400px;
-  margin: auto;
-}
+function openImageModal(src) {
+  let modal = document.getElementById("imageModal");
 
-.top-ad {
-  background: #5B2A86;
-  color: white;
-  text-align: center;
-  padding: 12px;
-  font-weight: bold;
-  letter-spacing: 0.3px;
-}
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "imageModal";
+    modal.className = "image-modal";
+    modal.innerHTML = `
+      <button class="close-modal" type="button">×</button>
+      <img src="" alt="Imagen ampliada">
+    `;
+    document.body.appendChild(modal);
 
-.site-header {
-  background: white;
-  border-bottom: 1px solid #ddd;
-}
+    modal.querySelector(".close-modal").addEventListener("click", function () {
+      modal.classList.remove("open");
+    });
 
-.header-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 22px 0;
-  gap: 20px;
-}
-
-.header-inner h1 {
-  font-size: 42px;
-  color: #111;
-}
-
-.header-inner h1 span {
-  color: #5B2A86;
-}
-
-.header-inner p {
-  margin-top: 5px;
-  color: #666;
-}
-
-.post-btn {
-  background: #5B2A86;
-  color: white;
-  text-decoration: none;
-  padding: 13px 18px;
-  border-radius: 6px;
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-.search-section {
-  background: white;
-  padding: 24px 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.search-box {
-  width: 100%;
-  padding: 20px;
-  font-size: 22px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  background: white;
-  color: #222;
-  outline: none;
-}
-
-.search-box:focus {
-  border-color: #5B2A86;
-}
-
-.page-layout {
-  display: grid;
-  grid-template-columns: 220px 1fr 220px;
-  gap: 20px;
-  margin-top: 25px;
-}
-
-.ad-box {
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  min-height: 600px;
-  text-align: center;
-  color: #555;
-}
-
-.ad-box p {
-  color: #999;
-  margin-bottom: 10px;
-  font-size: 13px;
-}
-
-.ad-box strong {
-  display: block;
-  margin-bottom: 8px;
-  color: #222;
-}
-
-.ad-box span {
-  color: #777;
-}
-
-.filters-bar {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.filters-bar select {
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: white;
-  color: #222;
-  font-size: 15px;
-}
-
-.results-count {
-  margin-bottom: 18px;
-  color: #666;
-  font-size: 14px;
-}
-
-.listings {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 18px;
-}
-
-.card {
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.10);
-}
-
-.card img {
-  width: 100%;
-  height: 215px;
-  object-fit: cover;
-  display: block;
-}
-
-.card-content {
-  padding: 15px;
-}
-
-.card-content h3 {
-  margin-bottom: 10px;
-  font-size: 18px;
-  line-height: 1.25;
-}
-
-.price {
-  color: #5B2A86;
-  font-size: 23px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.card-content p {
-  margin-bottom: 8px;
-  color: #555;
-}
-
-.card-content a {
-  display: inline-block;
-  margin-top: 10px;
-  background: #5B2A86;
-  color: white;
-  text-decoration: none;
-  padding: 10px 15px;
-  border-radius: 6px;
-  font-weight: bold;
-}
-
-.empty {
-  background: white;
-  border: 1px solid #ddd;
-  padding: 30px;
-  border-radius: 8px;
-  color: #666;
-}
-
-.warning {
-  margin-top: 40px;
-  background: white;
-  border-top: 1px solid #ddd;
-  padding: 30px 0;
-}
-
-.warning h2 {
-  color: #5B2A86;
-  margin-bottom: 10px;
-}
-
-.warning p {
-  color: #555;
-  line-height: 1.5;
-}
-
-@media (max-width: 1100px) {
-  .page-layout {
-    grid-template-columns: 1fr;
+    modal.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        modal.classList.remove("open");
+      }
+    });
   }
 
-  .ad-box {
-    min-height: auto;
-  }
+  modal.querySelector("img").src = src;
+  modal.classList.add("open");
 }
 
-@media (max-width: 700px) {
-  .header-inner {
-    flex-direction: column;
-    text-align: center;
-  }
+function sortListings(data) {
+  if (!sortFilter) return data;
 
-  .header-inner h1 {
-    font-size: 34px;
-  }
+  const sortValue = sortFilter.value;
+  const sorted = [...data];
 
-  .post-btn {
-    width: 100%;
-    text-align: center;
+  if (sortValue === "az") {
+    sorted.sort((a, b) => a.title.localeCompare(b.title));
   }
 
-  .search-box {
-    font-size: 18px;
-    padding: 16px;
+  if (sortValue === "za") {
+    sorted.sort((a, b) => b.title.localeCompare(a.title));
   }
 
-  .filters-bar {
-    flex-direction: column;
+  if (sortValue === "high") {
+    sorted.sort((a, b) => b.price - a.price);
   }
 
-  .filters-bar select {
-    width: 100%;
-  }
-}
-.single-card img{
-  width:100%;
-  height:auto;
-  max-height:none;
-  object-fit:contain;
-}
-.single-card img {
-  width: 100%;
-  height: 520px;
-  object-fit: contain;
-  background: #f1f1f1;
-  cursor: zoom-in;
-}
-
-.image-modal {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  inset: 0;
-  background: rgba(0,0,0,0.9);
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.image-modal.open {
-  display: flex;
-}
-
-.image-modal img {
-  max-width: 95vw;
-  max-height: 90vh;
-  object-fit: contain;
-}
-
-.close-modal {
-  position: fixed;
-  top: 18px;
-  right: 22px;
-  background: white;
-  color: #111;
-  border: none;
-  font-size: 26px;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-@media (max-width: 700px) {
-  .single-card img {
-    height: 360px;
-  }
-}
-.logo-link{
-  text-decoration:none;
-  color:#111;
-}
-
-.logo-link span{
-  color:#5B2A86;
-}
-
-.publish-box{
-  background:white;
-  border:1px solid #ddd;
-  border-radius:10px;
-  padding:30px;
-  margin:30px auto;
-  max-width:900px;
-}
-
-.publish-box h2{
-  color:#5B2A86;
-  margin-bottom:10px;
-}
-
-.publish-text{
-  color:#666;
-  margin-bottom:25px;
-}
-
-.publish-form{
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-}
-
-.form-row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
-}
-
-.form-group{
-  display:flex;
-  flex-direction:column;
-}
-
-.form-group label{
-  margin-bottom:6px;
-  font-weight:600;
-}
-
-.publish-form input,
-.publish-form select,
-.publish-form textarea{
-  padding:14px;
-  border:1px solid #ccc;
-  border-radius:8px;
-  font-size:15px;
-}
-
-.publish-form textarea{
-  min-height:140px;
-  resize:vertical;
-}
-
-.publish-submit{
-  background:#5B2A86;
-  color:white;
-  border:none;
-  padding:15px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:16px;
-  font-weight:bold;
-}
-
-.publish-submit:hover{
-  opacity:.92;
-}
-
-@media(max-width:700px){
-
-  .form-row{
-    grid-template-columns:1fr;
+  if (sortValue === "low") {
+    sorted.sort((a, b) => a.price - b.price);
   }
 
-}
-.ad-box {
-  padding: 0;
-  overflow: hidden;
+  return sorted;
 }
 
-.ad-box a {
-  display: block;
-  width: 100%;
-}
+function renderListings(data) {
+  if (!listingsGrid) return;
 
-.ad-box img {
-  width: 100%;
-  display: block;
-  border-radius: 14px;
-}
-.single-card {
-  overflow: hidden;
-}
+  listingsGrid.innerHTML = "";
 
-.listing-gallery {
-  width: 100%;
-}
+  const finalData = sortListings(data);
 
-.main-listing-image {
-  width: 100%;
-  height: 430px;
-  object-fit: contain;
-  background: #f4f1f7;
-  border-radius: 12px;
-  cursor: zoom-in;
-}
-
-.thumbnail-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 12px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 6px 2px 12px;
-  scroll-snap-type: x mandatory;
-}
-
-.thumbnail-btn {
-  flex: 0 0 92px;
-  width: 92px;
-  height: 92px;
-  border: 2px solid transparent;
-  border-radius: 10px;
-  padding: 3px;
-  background: #f4f1f7;
-  cursor: pointer;
-  scroll-snap-align: start;
-}
-
-.thumbnail-btn.active {
-  border-color: #5B2A86;
-}
-
-.thumbnail-btn img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 7px;
-  display: block;
-}
-
-@media (max-width: 700px) {
-  .main-listing-image {
-    height: 320px;
+  if (resultsCount) {
+    resultsCount.textContent =
+      finalData.length === 1
+        ? "1 anuncio encontrado"
+        : `${finalData.length} anuncios encontrados`;
   }
 
-  .thumbnail-btn {
-    flex: 0 0 74px;
-    width: 74px;
-    height: 74px;
-  }
-}
-.page-layout {
-  display: grid;
-  grid-template-columns: 220px minmax(0, 1fr) 220px;
-  gap: 24px;
-  align-items: start;
-}
-
-.ad-box {
-  width: 220px;
-  max-width: 220px;
-  padding: 0;
-  overflow: hidden;
-  border-radius: 14px;
-}
-
-.ad-box img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 14px;
-}
-
-.content-area {
-  min-width: 0;
-}
-
-@media (max-width: 1000px) {
-  .page-layout {
-    grid-template-columns: 1fr;
+  if (finalData.length === 0) {
+    listingsGrid.innerHTML = `<div class="empty">No se encontraron anuncios.</div>`;
+    return;
   }
 
-  .ad-box {
-    width: 100%;
-    max-width: 100%;
+  finalData.forEach(item => {
+    const originalIndex = listings.indexOf(item);
+
+    const card = document.createElement("div");
+    card.className = "card clickable-card";
+    card.onclick = function () {
+      window.location.href = `anuncio.html?id=${originalIndex}`;
+    };
+
+    card.innerHTML = `
+      <div class="card-accent"></div>
+      <img src="${item.image}" alt="${item.title}">
+      <div class="card-content">
+        <h3>${item.title}</h3>
+        <p class="price">$${item.price.toLocaleString()} MXN</p>
+        <p>${item.location}</p>
+        <p>${item.condition}</p>
+      </div>
+    `;
+
+    listingsGrid.appendChild(card);
+  });
+}
+
+function filterListings() {
+  const searchText = searchInput.value.toLowerCase().trim();
+  const selectedCategory = categoryFilter.value;
+  const selectedState = stateFilter.value;
+
+  const filtered = listings.filter(item => {
+    const searchableText = `
+      ${item.title}
+      ${item.category}
+      ${item.brand}
+      ${item.state}
+      ${item.location}
+      ${item.condition}
+      ${item.description}
+    `.toLowerCase();
+
+    const matchesSearch = searchText === "" || searchableText.includes(searchText);
+    const matchesCategory = selectedCategory === "" || item.category === selectedCategory;
+    const matchesState = selectedState === "" || item.state === selectedState;
+
+    return matchesSearch && matchesCategory && matchesState;
+  });
+
+  renderListings(filtered);
+}
+
+function renderSingleListing() {
+  if (!singleListing) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const id = parseInt(params.get("id"));
+  const item = listings[id];
+
+  if (!item) {
+    singleListing.innerHTML = `<div class="empty">No se encontró este anuncio.</div>`;
+    return;
   }
 
-  .left-ad,
-  .right-ad {
-    display: none;
-  }
+  singleListing.innerHTML = `
+    <div class="card single-card">
+      <img class="main-listing-image" src="${item.image}" alt="${item.title}">
+
+      <div class="card-content">
+        <h1>${item.title}</h1>
+        <p class="price">$${item.price.toLocaleString()} MXN</p>
+
+        <p><strong>Ubicación:</strong> ${item.location}</p>
+        <p><strong>Categoría:</strong> ${item.category}</p>
+        <p><strong>Marca:</strong> ${item.brand}</p>
+        <p><strong>Condición:</strong> ${item.condition}</p>
+
+        <br>
+
+        <p>${item.description}</p>
+
+        <br>
+
+        <a href="${item.facebook}" target="_blank">Contactar en Facebook</a>
+        <a href="${item.marketplace}" target="_blank">Ver publicación original</a>
+      </div>
+    </div>
+  `;
+
+  const mainImage = singleListing.querySelector(".main-listing-image");
+
+  mainImage.addEventListener("click", function () {
+    openImageModal(item.image);
+  });
 }
+
+let searchTimer;
+
+if (searchInput) {
+  searchInput.addEventListener("input", function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(filterListings, 250);
+  });
+
+  searchInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      filterListings();
+    }
+  });
+}
+
+if (categoryFilter) {
+  categoryFilter.addEventListener("change", filterListings);
+}
+
+if (stateFilter) {
+  stateFilter.addEventListener("change", filterListings);
+}
+
+if (sortFilter) {
+  sortFilter.addEventListener("change", filterListings);
+}
+
+renderListings(listings);
+renderSingleListing();
