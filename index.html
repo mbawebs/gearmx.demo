@@ -55,7 +55,7 @@
         </select>
 
         <select id="stateFilter">
-          <option value="">Todos los estados</option>
+          <option value="">Ubicación</option>
           <option value="Aguascalientes">Aguascalientes</option>
           <option value="Baja California">Baja California</option>
           <option value="Baja California Sur">Baja California Sur</option>
@@ -89,6 +89,14 @@
           <option value="Yucatán">Yucatán</option>
           <option value="Zacatecas">Zacatecas</option>
         </select>
+
+        <select id="sortFilter">
+          <option value="relevance">Relevancia</option>
+          <option value="az">A-Z</option>
+          <option value="za">Z-A</option>
+          <option value="high">Más caro</option>
+          <option value="low">Más barato</option>
+        </select>
       </div>
 
       <div id="resultsCount" class="results-count"></div>
@@ -114,6 +122,6 @@
     </div>
   </section>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=12"></script>
 </body>
 </html>
