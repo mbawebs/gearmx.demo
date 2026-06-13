@@ -51,47 +51,47 @@ function renderListings(data) {
   listingsGrid.innerHTML = "";
 
   if (data.length === 0) {
-    listingsGrid.innerHTML = `
-      <div class="empty">
-        No se encontraron anuncios.
-      </div>
-    `;
+    listingsGrid.innerHTML = `<div class="empty">No se encontraron anuncios.</div>`;
     return;
   }
 
   data.forEach(item => {
-    listingsGrid.innerHTML += `
-      <div class="card">
-        <img src="${item.image}" alt="${item.title}">
+    const card = document.createElement("div");
+    card.className = "card";
 
-        <div class="card-content">
-          <h3>${item.title}</h3>
-          <p class="price">$${item.price.toLocaleString()} MXN</p>
-          <p>${item.location}</p>
-          <p>${item.condition}</p>
-          <a href="#">Ver anuncio</a>
-        </div>
+    card.innerHTML = `
+      <img src="${item.image}" alt="${item.title}">
+      <div class="card-content">
+        <h3>${item.title}</h3>
+        <p class="price">$${item.price.toLocaleString()} MXN</p>
+        <p>${item.location}</p>
+        <p>${item.condition}</p>
+        <a href="#">Ver anuncio</a>
       </div>
     `;
+
+    listingsGrid.appendChild(card);
   });
 }
 
 function filterListings() {
-  const searchText = searchInput.value.toLowerCase();
+  const searchText = searchInput.value.trim().toLowerCase();
   const selectedCategory = categoryFilter.value;
   const selectedState = stateFilter.value;
 
   const filtered = listings.filter(item => {
-    const matchesSearch =
-      item.title.toLowerCase().includes(searchText) ||
-      item.brand.toLowerCase().includes(searchText) ||
-      item.category.toLowerCase().includes(searchText);
+    const text = `
+      ${item.title}
+      ${item.brand}
+      ${item.category}
+      ${item.location}
+      ${item.state}
+      ${item.condition}
+    `.toLowerCase();
 
-    const matchesCategory =
-      selectedCategory === "" || item.category === selectedCategory;
-
-    const matchesState =
-      selectedState === "" || item.state === selectedState;
+    const matchesSearch = searchText === "" || text.includes(searchText);
+    const matchesCategory = selectedCategory === "" || item.category === selectedCategory;
+    const matchesState = selectedState === "" || item.state === selectedState;
 
     return matchesSearch && matchesCategory && matchesState;
   });
@@ -100,7 +100,15 @@ function filterListings() {
 }
 
 searchBtn.addEventListener("click", filterListings);
+
 searchInput.addEventListener("input", filterListings);
+
+searchInput.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    filterListings();
+  }
+});
+
 categoryFilter.addEventListener("change", filterListings);
 stateFilter.addEventListener("change", filterListings);
 
