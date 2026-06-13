@@ -113,3 +113,4 @@ categoryFilter.addEventListener("change", filterListings);
 stateFilter.addEventListener("change", filterListings);
 
 renderListings(listings);
+console.log("BUSCADOR NUEVO CARGADO");
