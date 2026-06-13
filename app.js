@@ -21,7 +21,7 @@ const listings = [
     location: "Guadalajara, Jalisco",
     condition: "Demo / No disponible",
     image: "images/ibanez-rg550-green.png",
-    description: "Ibanez RG estilo shred, color verde llamativo, perfecta para probar cómo se vería una publicación de guitarra de alta ganancia.",
+    description: "Ibanez RG estilo shred, color verde llamativo, perfecta para probar cómo se vería una publicación de guitarra.",
     facebook: "https://facebook.com",
     marketplace: "https://facebook.com/marketplace"
   },
@@ -34,7 +34,7 @@ const listings = [
     location: "CDMX",
     condition: "Demo / No disponible",
     image: "images/jackson-soloist-blue.png",
-    description: "Jackson Soloist demo con acabado azul metálico, estilo metal moderno. Publicación de prueba.",
+    description: "Jackson Soloist demo con acabado azul metálico, estilo metal moderno.",
     facebook: "https://facebook.com",
     marketplace: "https://facebook.com/marketplace"
   },
@@ -64,7 +64,6 @@ const listings = [
     facebook: "https://facebook.com",
     marketplace: "https://facebook.com/marketplace"
   },
-
   {
     title: "Marshall JCM2000 DSL",
     category: "Amplificadores",
@@ -100,7 +99,7 @@ const listings = [
     location: "Hermosillo, Sonora",
     condition: "Demo / No disponible",
     image: "images/5150-iii.png",
-    description: "EVH 5150 III demo para sección de amplificadores de alto gain.",
+    description: "EVH 5150 III demo para sección de amplificadores high gain.",
     facebook: "https://facebook.com",
     marketplace: "https://facebook.com/marketplace"
   },
@@ -117,7 +116,6 @@ const listings = [
     facebook: "https://facebook.com",
     marketplace: "https://facebook.com/marketplace"
   },
-
   {
     title: "Boss SD-1 Super OverDrive",
     category: "Pedales",
@@ -183,7 +181,6 @@ const listings = [
     facebook: "https://facebook.com",
     marketplace: "https://facebook.com/marketplace"
   },
-
   {
     title: "Floyd Rose Gold",
     category: "Partes",
@@ -236,7 +233,6 @@ const listings = [
     facebook: "https://facebook.com",
     marketplace: "https://facebook.com/marketplace"
   },
-
   {
     title: "Music Man StingRay",
     category: "Bajos",
@@ -272,6 +268,36 @@ const stateFilter = document.getElementById("stateFilter");
 const resultsCount = document.getElementById("resultsCount");
 const singleListing = document.getElementById("singleListing");
 
+function openImageModal(src) {
+  let modal = document.getElementById("imageModal");
+
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "imageModal";
+    modal.className = "image-modal";
+
+    modal.innerHTML = `
+      <button class="close-modal" type="button">×</button>
+      <img src="" alt="Imagen ampliada">
+    `;
+
+    document.body.appendChild(modal);
+
+    modal.querySelector(".close-modal").addEventListener("click", function () {
+      modal.classList.remove("open");
+    });
+
+    modal.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        modal.classList.remove("open");
+      }
+    });
+  }
+
+  modal.querySelector("img").src = src;
+  modal.classList.add("open");
+}
+
 function renderListings(data) {
   if (!listingsGrid) return;
 
@@ -285,9 +311,7 @@ function renderListings(data) {
   }
 
   if (data.length === 0) {
-    listingsGrid.innerHTML = `
-      <div class="empty">No se encontraron anuncios.</div>
-    `;
+    listingsGrid.innerHTML = `<div class="empty">No se encontraron anuncios.</div>`;
     return;
   }
 
@@ -299,16 +323,12 @@ function renderListings(data) {
 
     card.innerHTML = `
       <img src="${item.image}" alt="${item.title}">
-
       <div class="card-content">
         <h3>${item.title}</h3>
         <p class="price">$${item.price.toLocaleString()} MXN</p>
         <p>${item.location}</p>
         <p>${item.condition}</p>
-
-        <a href="anuncio.html?id=${originalIndex}">
-          Ver anuncio
-        </a>
+        <a href="anuncio.html?id=${originalIndex}">Ver anuncio</a>
       </div>
     `;
 
@@ -332,14 +352,9 @@ function filterListings() {
       ${item.description}
     `.toLowerCase();
 
-    const matchesSearch =
-      searchText === "" || searchableText.includes(searchText);
-
-    const matchesCategory =
-      selectedCategory === "" || item.category === selectedCategory;
-
-    const matchesState =
-      selectedState === "" || item.state === selectedState;
+    const matchesSearch = searchText === "" || searchableText.includes(searchText);
+    const matchesCategory = selectedCategory === "" || item.category === selectedCategory;
+    const matchesState = selectedState === "" || item.state === selectedState;
 
     return matchesSearch && matchesCategory && matchesState;
   });
@@ -355,19 +370,16 @@ function renderSingleListing() {
   const item = listings[id];
 
   if (!item) {
-    singleListing.innerHTML = `
-      <div class="empty">No se encontró este anuncio.</div>
-    `;
+    singleListing.innerHTML = `<div class="empty">No se encontró este anuncio.</div>`;
     return;
   }
 
   singleListing.innerHTML = `
     <div class="card single-card">
-      <img src="${item.image}" alt="${item.title}">
+      <img class="main-listing-image" src="${item.image}" alt="${item.title}">
 
       <div class="card-content">
         <h1>${item.title}</h1>
-
         <p class="price">$${item.price.toLocaleString()} MXN</p>
 
         <p><strong>Ubicación:</strong> ${item.location}</p>
@@ -381,16 +393,17 @@ function renderSingleListing() {
 
         <br>
 
-        <a href="${item.facebook}" target="_blank">
-          Contactar en Facebook
-        </a>
-
-        <a href="${item.marketplace}" target="_blank">
-          Ver publicación original
-        </a>
+        <a href="${item.facebook}" target="_blank">Contactar en Facebook</a>
+        <a href="${item.marketplace}" target="_blank">Ver publicación original</a>
       </div>
     </div>
   `;
+
+  const mainImage = singleListing.querySelector(".main-listing-image");
+
+  mainImage.addEventListener("click", function () {
+    openImageModal(item.image);
+  });
 }
 
 let searchTimer;
