@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gear Marketplace</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gear México</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -15,7 +15,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <div>
-        <h1>Gear Marketplace</h1>
+        <h1><span>Gear</span> México</h1>
         <p>Gear musical en México. Busca, publica y contacta directo.</p>
       </div>
 
@@ -25,13 +25,18 @@
 
   <section class="search-section">
     <div class="container">
-      <input id="searchInput" type="text" placeholder="Buscar Charvel, Ibanez, Marshall, Boss..." class="search-box">
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Buscar Charvel, Ibanez, Marshall, Boss..."
+        class="search-box"
+      />
     </div>
   </section>
 
   <main class="container page-layout">
 
-    <aside class="left-ad">
+    <aside class="ad-box left-ad">
       <p>ANUNCIO</p>
       <strong>Tu banner aquí</strong>
       <span>300 x 600</span>
@@ -51,21 +56,48 @@
 
         <select id="stateFilter">
           <option value="">Todos los estados</option>
-          <option value="Nuevo León">Nuevo León</option>
-          <option value="Jalisco">Jalisco</option>
+          <option value="Aguascalientes">Aguascalientes</option>
+          <option value="Baja California">Baja California</option>
+          <option value="Baja California Sur">Baja California Sur</option>
+          <option value="Campeche">Campeche</option>
+          <option value="Chiapas">Chiapas</option>
+          <option value="Chihuahua">Chihuahua</option>
           <option value="CDMX">CDMX</option>
           <option value="Coahuila">Coahuila</option>
+          <option value="Colima">Colima</option>
+          <option value="Durango">Durango</option>
+          <option value="Estado de México">Estado de México</option>
+          <option value="Guanajuato">Guanajuato</option>
+          <option value="Guerrero">Guerrero</option>
+          <option value="Hidalgo">Hidalgo</option>
+          <option value="Jalisco">Jalisco</option>
+          <option value="Michoacán">Michoacán</option>
+          <option value="Morelos">Morelos</option>
+          <option value="Nayarit">Nayarit</option>
+          <option value="Nuevo León">Nuevo León</option>
+          <option value="Oaxaca">Oaxaca</option>
           <option value="Puebla">Puebla</option>
+          <option value="Querétaro">Querétaro</option>
+          <option value="Quintana Roo">Quintana Roo</option>
+          <option value="San Luis Potosí">San Luis Potosí</option>
+          <option value="Sinaloa">Sinaloa</option>
+          <option value="Sonora">Sonora</option>
+          <option value="Tabasco">Tabasco</option>
+          <option value="Tamaulipas">Tamaulipas</option>
+          <option value="Tlaxcala">Tlaxcala</option>
+          <option value="Veracruz">Veracruz</option>
+          <option value="Yucatán">Yucatán</option>
+          <option value="Zacatecas">Zacatecas</option>
         </select>
-
-        <button id="searchBtn">Buscar</button>
       </div>
+
+      <div id="resultsCount" class="results-count"></div>
 
       <div id="listingsGrid" class="listings"></div>
 
     </section>
 
-    <aside class="right-ad">
+    <aside class="ad-box right-ad">
       <p>ANUNCIO</p>
       <strong>ShredLabs</strong>
       <span>Guitar Builder</span>
@@ -76,7 +108,9 @@
   <section class="warning">
     <div class="container">
       <h2>Compra con precaución</h2>
-      <p>Investiga al vendedor antes de realizar cualquier compra. Gear Marketplace solo muestra anuncios y no participa en pagos, envíos, apartados, garantías ni entregas.</p>
+      <p>
+        Investiga al vendedor antes de realizar cualquier compra. Gear México solo muestra anuncios y no participa en pagos, envíos, apartados, garantías ni entregas.
+      </p>
     </div>
   </section>
 
