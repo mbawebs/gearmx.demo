@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Publicar anuncio | Gear México</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -14,65 +14,117 @@
 
   <header class="site-header">
     <div class="container header-inner">
+
       <div>
-        <h1><span>Gear</span> México</h1>
+        <h1>
+          <a href="index.html" class="logo-link">
+            <span>Gear</span> México
+          </a>
+        </h1>
+
         <p>Publica tu gear musical en México</p>
       </div>
 
-      <a href="index.html" class="post-btn">Volver al inicio</a>
+      <a href="index.html" class="post-btn">
+        Volver al inicio
+      </a>
+
     </div>
   </header>
 
-  <main class="container single-page">
+  <main class="container">
 
     <section class="publish-box">
+
       <h2>Publicar anuncio</h2>
-      <p class="small-note">
-        Demo del formulario. Aún no guarda anuncios reales; el siguiente paso será conectarlo a Supabase.
+
+      <p class="publish-text">
+        Estamos preparando la versión donde podrás publicar directamente.
+        Por ahora este formulario funciona como demostración visual.
       </p>
 
       <form class="publish-form">
 
-        <label>Título del anuncio</label>
-        <input type="text" placeholder="Ej. Charvel Fusion Special MIJ 1990">
+        <div class="form-group">
+          <label>Título del anuncio</label>
+          <input
+            type="text"
+            placeholder="Ej. Charvel Fusion Special MIJ 1990"
+          >
+        </div>
 
-        <label>Precio</label>
-        <input type="number" placeholder="Ej. 22000">
+        <div class="form-row">
 
-        <label>Categoría</label>
-        <select>
-          <option>Guitarras</option>
-          <option>Bajos</option>
-          <option>Amplificadores</option>
-          <option>Pedales</option>
-          <option>Partes</option>
-        </select>
+          <div class="form-group">
+            <label>Precio</label>
+            <input
+              type="number"
+              placeholder="22000"
+            >
+          </div>
 
-        <label>Ubicación</label>
-        <input type="text" placeholder="Ej. Monterrey, Nuevo León">
+          <div class="form-group">
+            <label>Categoría</label>
 
-        <label>Descripción</label>
-        <textarea placeholder="Describe condición, detalles, cambios, si aceptas cambios, etc."></textarea>
+            <select>
+              <option>Guitarras</option>
+              <option>Bajos</option>
+              <option>Amplificadores</option>
+              <option>Pedales</option>
+              <option>Partes</option>
+            </select>
+          </div>
 
-        <label>Fotos</label>
-        <input type="file" multiple accept="image/*">
+        </div>
 
-        <label>Link de contacto</label>
-        <input type="url" placeholder="Facebook, Marketplace, Instagram o WhatsApp">
+        <div class="form-group">
+          <label>Ubicación</label>
 
-        <button type="submit">Publicar anuncio demo</button>
+          <input
+            type="text"
+            placeholder="Monterrey, Nuevo León"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Descripción</label>
+
+          <textarea
+            placeholder="Describe condición, modificaciones, detalles importantes..."
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Fotos</label>
+
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Facebook / Marketplace / Instagram / WhatsApp</label>
+
+          <input
+            type="text"
+            placeholder="https://..."
+          >
+        </div>
+
+        <button
+          type="button"
+          class="publish-submit"
+        >
+          Publicar anuncio
+        </button>
 
       </form>
+
     </section>
 
   </main>
-
-  <section class="warning">
-    <div class="container">
-      <h2>Compra con precaución</h2>
-      <p>Gear México solo muestra anuncios y no participa en pagos, envíos, apartados, garantías ni entregas.</p>
-    </div>
-  </section>
 
 </body>
 </html>
