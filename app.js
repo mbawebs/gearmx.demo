@@ -269,6 +269,11 @@ const sortFilter = document.getElementById("sortFilter");
 const resultsCount = document.getElementById("resultsCount");
 const singleListing = document.getElementById("singleListing");
 
+let modalGalleryImages = [];
+let modalCurrentIndex = 0;
+let touchStartX = 0;
+let touchEndX = 0;
+
 function getExtraImages(baseImage) {
   const dotIndex = baseImage.lastIndexOf(".");
   const name = baseImage.substring(0, dotIndex);
@@ -283,7 +288,31 @@ function getExtraImages(baseImage) {
   ];
 }
 
-function openImageModal(src) {
+function showModalImage() {
+  const modal = document.getElementById("imageModal");
+  if (!modal) return;
+
+  const modalImage = modal.querySelector(".modal-main-image");
+  modalImage.src = modalGalleryImages[modalCurrentIndex];
+}
+
+function showNextModalImage() {
+  if (modalGalleryImages.length <= 1) return;
+  modalCurrentIndex = (modalCurrentIndex + 1) % modalGalleryImages.length;
+  showModalImage();
+}
+
+function showPrevModalImage() {
+  if (modalGalleryImages.length <= 1) return;
+  modalCurrentIndex =
+    (modalCurrentIndex - 1 + modalGalleryImages.length) % modalGalleryImages.length;
+  showModalImage();
+}
+
+function openImageModal(images, startIndex) {
+  modalGalleryImages = Array.isArray(images) ? images : [images];
+  modalCurrentIndex = startIndex || 0;
+
   let modal = document.getElementById("imageModal");
 
   if (!modal) {
@@ -292,7 +321,9 @@ function openImageModal(src) {
     modal.className = "image-modal";
     modal.innerHTML = `
       <button class="close-modal" type="button">×</button>
-      <img src="" alt="Imagen ampliada">
+      <button class="modal-arrow modal-prev" type="button">‹</button>
+      <img class="modal-main-image" src="" alt="Imagen ampliada">
+      <button class="modal-arrow modal-next" type="button">›</button>
     `;
     document.body.appendChild(modal);
 
@@ -300,16 +331,60 @@ function openImageModal(src) {
       modal.classList.remove("open");
     });
 
+    modal.querySelector(".modal-next").addEventListener("click", function (event) {
+      event.stopPropagation();
+      showNextModalImage();
+    });
+
+    modal.querySelector(".modal-prev").addEventListener("click", function (event) {
+      event.stopPropagation();
+      showPrevModalImage();
+    });
+
     modal.addEventListener("click", function (event) {
       if (event.target === modal) {
         modal.classList.remove("open");
       }
     });
+
+    modal.addEventListener("touchstart", function (event) {
+      touchStartX = event.changedTouches[0].screenX;
+    });
+
+    modal.addEventListener("touchend", function (event) {
+      touchEndX = event.changedTouches[0].screenX;
+      const swipeDistance = touchEndX - touchStartX;
+
+      if (swipeDistance > 60) {
+        showPrevModalImage();
+      }
+
+      if (swipeDistance < -60) {
+        showNextModalImage();
+      }
+    });
   }
 
-  modal.querySelector("img").src = src;
+  showModalImage();
   modal.classList.add("open");
 }
+
+document.addEventListener("keydown", function (event) {
+  const modal = document.getElementById("imageModal");
+  if (!modal || !modal.classList.contains("open")) return;
+
+  if (event.key === "ArrowRight") {
+    showNextModalImage();
+  }
+
+  if (event.key === "ArrowLeft") {
+    showPrevModalImage();
+  }
+
+  if (event.key === "Escape") {
+    modal.classList.remove("open");
+  }
+});
 
 function sortListings(data) {
   if (!sortFilter) return data;
@@ -410,7 +485,7 @@ function renderSingleListing() {
   singleListing.innerHTML = `
     <div class="card single-card">
       <div class="listing-gallery">
-        <img class="main-listing-image" src="${item.image}" alt="${item.title}">
+        <img class="main-listing-image" src="${item.image}" alt="${item.title}" data-current-image="${item.image}">
 
         <div class="thumbnail-row">
           ${galleryImages.map((img, index) => `
@@ -443,21 +518,39 @@ function renderSingleListing() {
   `;
 
   const mainImage = singleListing.querySelector(".main-listing-image");
-  const thumbnails = singleListing.querySelectorAll(".thumbnail-btn");
 
-  thumbnails.forEach(button => {
-    button.addEventListener("click", function () {
-      const newImage = button.dataset.image;
+  function getVisibleGalleryImages() {
+    return Array.from(singleListing.querySelectorAll(".thumbnail-btn"))
+      .map(button => button.dataset.image);
+  }
 
-      mainImage.src = newImage;
+  function refreshThumbnailEvents() {
+    const thumbnails = singleListing.querySelectorAll(".thumbnail-btn");
 
-      thumbnails.forEach(btn => btn.classList.remove("active"));
-      button.classList.add("active");
+    thumbnails.forEach(button => {
+      button.addEventListener("click", function () {
+        const newImage = button.dataset.image;
+
+        mainImage.src = newImage;
+        mainImage.dataset.currentImage = newImage;
+
+        singleListing.querySelectorAll(".thumbnail-btn").forEach(btn => {
+          btn.classList.remove("active");
+        });
+
+        button.classList.add("active");
+      });
     });
-  });
+  }
+
+  refreshThumbnailEvents();
 
   mainImage.addEventListener("click", function () {
-    openImageModal(mainImage.src);
+    const visibleImages = getVisibleGalleryImages();
+    const currentImage = mainImage.dataset.currentImage || item.image;
+    const currentIndex = Math.max(0, visibleImages.indexOf(currentImage));
+
+    openImageModal(visibleImages, currentIndex);
   });
 }
 
