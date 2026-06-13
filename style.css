@@ -399,3 +399,18 @@ body {
   }
 
 }
+.ad-box {
+  padding: 0;
+  overflow: hidden;
+}
+
+.ad-box a {
+  display: block;
+  width: 100%;
+}
+
+.ad-box img {
+  width: 100%;
+  display: block;
+  border-radius: 14px;
+}
