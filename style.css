@@ -517,3 +517,42 @@ body {
     display: none;
   }
 }
+.main-listing-image {
+  width: 100%;
+  height: 520px;
+  object-fit: contain;
+  background: #f1f1f1;
+  cursor: zoom-in;
+  display: block;
+}
+
+.thumbnail-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 14px;
+  background: white;
+}
+
+.thumbnail-btn {
+  flex: 0 0 86px;
+  width: 86px;
+  height: 86px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 3px;
+  background: #f4f1f7;
+  cursor: pointer;
+}
+
+.thumbnail-btn.active {
+  border-color: #5B2A86;
+}
+
+.thumbnail-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+  display: block;
+}
