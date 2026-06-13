@@ -1,1 +1,154 @@
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f0f0f;
+  color: #f2f2f2;
+}
+
+.container {
+  width: min(1100px, 92%);
+  margin: auto;
+}
+
+header {
+  padding: 28px 0;
+  background: #171717;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+header p {
+  margin: 6px 0 0;
+  color: #aaa;
+}
+
+.hero {
+  padding: 40px 0;
+  background: linear-gradient(135deg, #1b1b1b, #101010);
+}
+
+.search-box {
+  width: 100%;
+  padding: 18px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  background: #080808;
+  color: white;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+select,
+button {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  background: #181818;
+  color: white;
+  font-size: 15px;
+}
+
+button {
+  background: #18a558;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+main {
+  padding: 35px 0;
+}
+
+.listings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: #181818;
+  border: 1px solid #2d2d2d;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.card img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-content {
+  padding: 18px;
+}
+
+.card h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #18a558;
+}
+
+.card p {
+  color: #bbb;
+}
+
+.card a {
+  display: inline-block;
+  margin-top: 10px;
+  color: white;
+  background: #333;
+  padding: 10px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.warning {
+  padding: 28px 0;
+  background: #1b1208;
+  border-top: 1px solid #4b2b0b;
+}
+
+.warning h2 {
+  margin-top: 0;
+  color: #ffb84d;
+}
+
+.warning p {
+  color: #ddd;
+}
+
+@media (max-width: 700px) {
+  header h1 {
+    font-size: 26px;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  select,
+  button {
+    width: 100%;
+  }
+}
