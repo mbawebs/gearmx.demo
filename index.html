@@ -8,17 +8,38 @@
 </head>
 <body>
 
-  <header>
-    <div class="container">
-      <h1>Gear Marketplace</h1>
-<p>Gear musical en México. Busca, publica y contacta directo.</p>    </div>
+  <div class="top-ad">
+    ANUNCIA TU NEGOCIO AQUÍ · Luthiers · Tiendas · Clases · Gear
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div>
+        <h1>Gear Marketplace</h1>
+        <p>Gear musical en México. Busca, publica y contacta directo.</p>
+      </div>
+
+      <a href="#" class="post-btn">Publicar anuncio</a>
+    </div>
   </header>
 
-  <section class="hero">
+  <section class="search-section">
     <div class="container">
-      <input id="searchInput" type="text" placeholder="Buscar Charvel, Ibanez, Marshall..." class="search-box">
+      <input id="searchInput" type="text" placeholder="Buscar Charvel, Ibanez, Marshall, Boss..." class="search-box">
+    </div>
+  </section>
 
-      <div class="filters">
+  <main class="container page-layout">
+
+    <aside class="left-ad">
+      <p>ANUNCIO</p>
+      <strong>Tu banner aquí</strong>
+      <span>300 x 600</span>
+    </aside>
+
+    <section class="content-area">
+
+      <div class="filters-bar">
         <select id="categoryFilter">
           <option value="">Todas las categorías</option>
           <option value="Guitarras">Guitarras</option>
@@ -39,18 +60,23 @@
 
         <button id="searchBtn">Buscar</button>
       </div>
-    </div>
-  </section>
 
-  <main class="container">
-    <div id="listingsGrid" class="listings"></div>
+      <div id="listingsGrid" class="listings"></div>
+
+    </section>
+
+    <aside class="right-ad">
+      <p>ANUNCIO</p>
+      <strong>ShredLabs</strong>
+      <span>Guitar Builder</span>
+    </aside>
+
   </main>
 
   <section class="warning">
     <div class="container">
-      <h2>⚠️ Compra con precaución</h2>
-      <p>Investiga al vendedor antes de realizar cualquier compra.</p>
-      <p>Gear Marketplace solo muestra anuncios y no participa en pagos, envíos, apartados, garantías ni entregas.</p>
+      <h2>Compra con precaución</h2>
+      <p>Investiga al vendedor antes de realizar cualquier compra. Gear Marketplace solo muestra anuncios y no participa en pagos, envíos, apartados, garantías ni entregas.</p>
     </div>
   </section>
 
