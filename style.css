@@ -17,7 +17,7 @@ body {
 }
 
 .top-ad {
-  background: #b71c1c;
+  background: #5B2A86;
   color: white;
   text-align: center;
   padding: 12px;
@@ -44,7 +44,7 @@ body {
 }
 
 .header-inner h1 span {
-  color: #b71c1c;
+  color: #5B2A86;
 }
 
 .header-inner p {
@@ -53,7 +53,7 @@ body {
 }
 
 .post-btn {
-  background: #b71c1c;
+  background: #5B2A86;
   color: white;
   text-decoration: none;
   padding: 13px 18px;
@@ -80,7 +80,7 @@ body {
 }
 
 .search-box:focus {
-  border-color: #b71c1c;
+  border-color: #5B2A86;
 }
 
 .page-layout {
@@ -174,7 +174,7 @@ body {
 }
 
 .price {
-  color: #b71c1c;
+  color: #5B2A86;
   font-size: 23px;
   font-weight: bold;
   margin-bottom: 10px;
@@ -188,7 +188,7 @@ body {
 .card-content a {
   display: inline-block;
   margin-top: 10px;
-  background: #b71c1c;
+  background: #5B2A86;
   color: white;
   text-decoration: none;
   padding: 10px 15px;
@@ -212,7 +212,7 @@ body {
 }
 
 .warning h2 {
-  color: #b71c1c;
+  color: #5B2A86;
   margin-bottom: 10px;
 }
 
