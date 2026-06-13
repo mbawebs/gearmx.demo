@@ -38,6 +38,26 @@ const listings = [
     location: "Saltillo, Coahuila",
     condition: "Usado",
     image: "https://picsum.photos/600/400?4"
+  },
+  {
+    title: "Jackson Dinky DK2M",
+    category: "Guitarras",
+    brand: "Jackson",
+    price: 14500,
+    state: "Estado de México",
+    location: "Toluca, Estado de México",
+    condition: "Usada",
+    image: "https://picsum.photos/600/400?5"
+  },
+  {
+    title: "ESP LTD EC-1000",
+    category: "Guitarras",
+    brand: "ESP",
+    price: 17500,
+    state: "Querétaro",
+    location: "Querétaro, Querétaro",
+    condition: "Usada",
+    image: "https://picsum.photos/600/400?6"
   }
 ];
 
@@ -45,130 +65,96 @@ const listingsGrid = document.getElementById("listingsGrid");
 const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
 const stateFilter = document.getElementById("stateFilter");
-const searchBtn = document.getElementById("searchBtn");
+const resultsCount = document.getElementById("resultsCount");
 
 function renderListings(data) {
-
   listingsGrid.innerHTML = "";
 
+  resultsCount.textContent =
+    data.length === 1
+      ? "1 anuncio encontrado"
+      : `${data.length} anuncios encontrados`;
+
   if (data.length === 0) {
-
     listingsGrid.innerHTML = `
-      <h2>No se encontraron anuncios.</h2>
+      <div class="empty">
+        No se encontraron anuncios.
+      </div>
     `;
-
     return;
   }
 
   data.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "card";
 
-    listingsGrid.innerHTML += `
-      <div class="card">
+    card.innerHTML = `
+      <img src="${item.image}" alt="${item.title}">
 
-        <img src="${item.image}" alt="${item.title}">
+      <div class="card-content">
+        <h3>${item.title}</h3>
 
-        <div class="card-content">
+        <p class="price">$${item.price.toLocaleString()} MXN</p>
 
-          <h3>${item.title}</h3>
+        <p>${item.location}</p>
 
-          <p class="price">
-            $${item.price.toLocaleString()} MXN
-          </p>
+        <p>${item.condition}</p>
 
-          <p>${item.location}</p>
-
-          <p>${item.condition}</p>
-
-          <a href="#">
-            Ver anuncio
-          </a>
-
-        </div>
-
+        <a href="#">Ver anuncio</a>
       </div>
     `;
 
+    listingsGrid.appendChild(card);
   });
-
 }
 
 function filterListings() {
-
-  const searchText =
-    searchInput.value.toLowerCase().trim();
-
-  const selectedCategory =
-    categoryFilter.value;
-
-  const selectedState =
-    stateFilter.value;
+  const searchText = searchInput.value.toLowerCase().trim();
+  const selectedCategory = categoryFilter.value;
+  const selectedState = stateFilter.value;
 
   const filtered = listings.filter(item => {
+    const searchableText = `
+      ${item.title}
+      ${item.category}
+      ${item.brand}
+      ${item.state}
+      ${item.location}
+      ${item.condition}
+    `.toLowerCase();
 
     const matchesSearch =
-      item.title.toLowerCase().includes(searchText) ||
-      item.brand.toLowerCase().includes(searchText);
+      searchText === "" || searchableText.includes(searchText);
 
     const matchesCategory =
-      selectedCategory === "" ||
-      item.category === selectedCategory;
+      selectedCategory === "" || item.category === selectedCategory;
 
     const matchesState =
-      selectedState === "" ||
-      item.state === selectedState;
+      selectedState === "" || item.state === selectedState;
 
-    return (
-      matchesSearch &&
-      matchesCategory &&
-      matchesState
-    );
-
+    return matchesSearch && matchesCategory && matchesState;
   });
 
   renderListings(filtered);
-
 }
-
-searchBtn.addEventListener(
-  "click",
-  filterListings
-);
 
 let searchTimer;
 
-searchInput.addEventListener(
-  "input",
-  function () {
+searchInput.addEventListener("input", function () {
+  clearTimeout(searchTimer);
 
-    clearTimeout(searchTimer);
+  searchTimer = setTimeout(function () {
+    filterListings();
+  }, 250);
+});
 
-    searchTimer = setTimeout(
-      filterListings,
-      300
-    );
-
+searchInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    filterListings();
   }
-);
+});
 
-searchInput.addEventListener(
-  "keydown",
-  function (event) {
-
-    if (event.key === "Enter") {
-      filterListings();
-    }
-
-  }
-);
-
-categoryFilter.addEventListener(
-  "change",
-  filterListings
-);
-
-stateFilter.addEventListener(
-  "change",
-  filterListings
-);
+categoryFilter.addEventListener("change", filterListings);
+stateFilter.addEventListener("change", filterListings);
 
 renderListings(listings);
