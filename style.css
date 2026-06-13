@@ -414,3 +414,65 @@ body {
   display: block;
   border-radius: 14px;
 }
+.single-card {
+  overflow: hidden;
+}
+
+.listing-gallery {
+  width: 100%;
+}
+
+.main-listing-image {
+  width: 100%;
+  height: 430px;
+  object-fit: contain;
+  background: #f4f1f7;
+  border-radius: 12px;
+  cursor: zoom-in;
+}
+
+.thumbnail-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 6px 2px 12px;
+  scroll-snap-type: x mandatory;
+}
+
+.thumbnail-btn {
+  flex: 0 0 92px;
+  width: 92px;
+  height: 92px;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 3px;
+  background: #f4f1f7;
+  cursor: pointer;
+  scroll-snap-align: start;
+}
+
+.thumbnail-btn.active {
+  border-color: #5B2A86;
+}
+
+.thumbnail-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+  display: block;
+}
+
+@media (max-width: 700px) {
+  .main-listing-image {
+    height: 320px;
+  }
+
+  .thumbnail-btn {
+    flex: 0 0 74px;
+    width: 74px;
+    height: 74px;
+  }
+}
