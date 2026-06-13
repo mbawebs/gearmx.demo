@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gear Marketplace</title>
-
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,110 +11,50 @@
   <header>
     <div class="container">
       <h1>Gear Marketplace</h1>
-      <p>Compra y vende gear usado en México</p>
+      <p>Gear usado en México. Busca, publica y contacta directo.</p>
     </div>
   </header>
 
   <section class="hero">
     <div class="container">
-
-      <input
-        type="text"
-        placeholder="Buscar Charvel, Ibanez, Marshall..."
-        class="search-box"
-      >
+      <input id="searchInput" type="text" placeholder="Buscar Charvel, Ibanez, Marshall..." class="search-box">
 
       <div class="filters">
-
-        <select>
-          <option>Todas las categorías</option>
-          <option>Guitarras</option>
-          <option>Bajos</option>
-          <option>Amplificadores</option>
-          <option>Pedales</option>
-          <option>Partes</option>
+        <select id="categoryFilter">
+          <option value="">Todas las categorías</option>
+          <option value="Guitarras">Guitarras</option>
+          <option value="Bajos">Bajos</option>
+          <option value="Amplificadores">Amplificadores</option>
+          <option value="Pedales">Pedales</option>
+          <option value="Partes">Partes</option>
         </select>
 
-        <select>
-          <option>Todos los estados</option>
-          <option>Nuevo León</option>
-          <option>Jalisco</option>
-          <option>CDMX</option>
-          <option>Coahuila</option>
-          <option>Puebla</option>
+        <select id="stateFilter">
+          <option value="">Todos los estados</option>
+          <option value="Nuevo León">Nuevo León</option>
+          <option value="Jalisco">Jalisco</option>
+          <option value="CDMX">CDMX</option>
+          <option value="Coahuila">Coahuila</option>
+          <option value="Puebla">Puebla</option>
         </select>
 
-        <button>Buscar</button>
-
+        <button id="searchBtn">Buscar</button>
       </div>
-
     </div>
   </section>
 
   <main class="container">
-
-    <div class="listings">
-
-      <div class="card">
-        <img src="https://picsum.photos/600/400?1">
-
-        <div class="card-content">
-          <h3>Charvel Fusion Special MIJ 1990</h3>
-          <p class="price">$22,000 MXN</p>
-          <p>Monterrey, Nuevo León</p>
-
-          <a href="#">Ver anuncio</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <img src="https://picsum.photos/600/400?2">
-
-        <div class="card-content">
-          <h3>Ibanez RG550 Genesis</h3>
-          <p class="price">$18,500 MXN</p>
-          <p>Guadalajara, Jalisco</p>
-
-          <a href="#">Ver anuncio</a>
-        </div>
-      </div>
-
-      <div class="card">
-        <img src="https://picsum.photos/600/400?3">
-
-        <div class="card-content">
-          <h3>Marshall JCM2000</h3>
-          <p class="price">$16,000 MXN</p>
-          <p>CDMX</p>
-
-          <a href="#">Ver anuncio</a>
-        </div>
-      </div>
-
-    </div>
-
+    <div id="listingsGrid" class="listings"></div>
   </main>
 
   <section class="warning">
-
     <div class="container">
-
       <h2>⚠️ Compra con precaución</h2>
-
-      <p>
-        Investiga al vendedor antes de realizar cualquier compra.
-      </p>
-
-      <p>
-        Esta plataforma únicamente publica anuncios y no participa
-        en pagos, envíos o garantías.
-      </p>
-
+      <p>Investiga al vendedor antes de realizar cualquier compra.</p>
+      <p>Gear Marketplace solo muestra anuncios y no participa en pagos, envíos, apartados, garantías ni entregas.</p>
     </div>
-
   </section>
 
   <script src="app.js"></script>
-
 </body>
 </html>
