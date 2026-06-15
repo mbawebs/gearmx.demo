@@ -502,19 +502,71 @@ body {
   min-width: 0;
 }
 
+/* Tablet: Stack layout, show ads full-width */
 @media (max-width: 1000px) {
   .page-layout {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .ad-box {
     width: 100%;
     max-width: 100%;
+    height: auto;
+    border-radius: 10px;
   }
 
-  .left-ad,
+  .ad-box img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .left-ad {
+    order: -1;
+    margin-bottom: 8px;
+  }
+
   .right-ad {
-    display: none;
+    order: 3;
+    margin-top: 8px;
+  }
+}
+
+/* Mobile Portrait: Compact ads with 120px max height */
+@media (max-width: 700px) {
+  .page-layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .ad-box {
+    width: 100%;
+    max-width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .ad-box img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+  }
+
+  .left-ad {
+    order: -1;
+    margin-bottom: 4px;
+  }
+
+  .right-ad {
+    order: 3;
+    margin-top: 4px;
   }
 }
 .main-listing-image {
