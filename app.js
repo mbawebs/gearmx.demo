@@ -269,6 +269,11 @@ const sortFilter = document.getElementById("sortFilter");
 const resultsCount = document.getElementById("resultsCount");
 const singleListing = document.getElementById("singleListing");
 
+// Pagination variables
+let currentPage = 1;
+const itemsPerPage = 8;
+let filteredListings = [];
+
 let modalGalleryImages = [];
 let modalCurrentIndex = 0;
 let touchStartX = 0;
@@ -400,11 +405,80 @@ function sortListings(data) {
   return sorted;
 }
 
+function renderPagination(totalItems) {
+  // Remove existing pagination if present
+  const existingPagination = document.querySelector(".pagination");
+  if (existingPagination) {
+    existingPagination.remove();
+  }
+
+  if (totalItems === 0) return;
+
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  
+  if (totalPages <= 1) return;
+
+  const paginationDiv = document.createElement("div");
+  paginationDiv.className = "pagination";
+
+  // Previous button
+  if (currentPage > 1) {
+    const prevBtn = document.createElement("button");
+    prevBtn.className = "page-btn prev-btn";
+    prevBtn.textContent = "← Anterior";
+    prevBtn.onclick = () => {
+      if (currentPage > 1) {
+        currentPage--;
+        filterListings();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    };
+    paginationDiv.appendChild(prevBtn);
+  }
+
+  // Page numbers
+  for (let i = 1; i <= totalPages; i++) {
+    const pageBtn = document.createElement("button");
+    pageBtn.className = "page-btn number-btn";
+    if (i === currentPage) {
+      pageBtn.classList.add("active");
+      pageBtn.disabled = true;
+    }
+    pageBtn.textContent = i;
+    pageBtn.onclick = () => {
+      currentPage = i;
+      filterListings();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    paginationDiv.appendChild(pageBtn);
+  }
+
+  // Next button
+  if (currentPage < totalPages) {
+    const nextBtn = document.createElement("button");
+    nextBtn.className = "page-btn next-btn";
+    nextBtn.textContent = "Siguiente →";
+    nextBtn.onclick = () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        filterListings();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    };
+    paginationDiv.appendChild(nextBtn);
+  }
+
+  if (listingsGrid) {
+    listingsGrid.parentNode.insertBefore(paginationDiv, listingsGrid.nextSibling);
+  }
+}
+
 function renderListings(data) {
   if (!listingsGrid) return;
 
   listingsGrid.innerHTML = "";
   const finalData = sortListings(data);
+  filteredListings = finalData;
 
   if (resultsCount) {
     resultsCount.textContent =
@@ -415,10 +489,18 @@ function renderListings(data) {
 
   if (finalData.length === 0) {
     listingsGrid.innerHTML = `<div class="empty">No se encontraron anuncios.</div>`;
+    renderPagination(0);
     return;
   }
 
-  finalData.forEach(item => {
+  // Calculate pagination
+  const totalPages = Math.ceil(finalData.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, finalData.length);
+  const pageItems = finalData.slice(startIndex, endIndex);
+
+  // Render items for current page
+  pageItems.forEach(item => {
     const originalIndex = listings.indexOf(item);
 
     const card = document.createElement("div");
@@ -440,6 +522,9 @@ function renderListings(data) {
 
     listingsGrid.appendChild(card);
   });
+
+  // Render pagination controls
+  renderPagination(finalData.length);
 }
 
 function filterListings() {
@@ -559,19 +644,37 @@ let searchTimer;
 if (searchInput) {
   searchInput.addEventListener("input", function () {
     clearTimeout(searchTimer);
+    currentPage = 1;
     searchTimer = setTimeout(filterListings, 250);
   });
 
   searchInput.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
+      currentPage = 1;
       filterListings();
     }
   });
 }
 
-if (categoryFilter) categoryFilter.addEventListener("change", filterListings);
-if (stateFilter) stateFilter.addEventListener("change", filterListings);
-if (sortFilter) sortFilter.addEventListener("change", filterListings);
+if (categoryFilter) {
+  categoryFilter.addEventListener("change", function () {
+    currentPage = 1;
+    filterListings();
+  });
+}
+
+if (stateFilter) {
+  stateFilter.addEventListener("change", function () {
+    currentPage = 1;
+    filterListings();
+  });
+}
+
+if (sortFilter) {
+  sortFilter.addEventListener("change", function () {
+    filterListings();
+  });
+}
 
 renderListings(listings);
 renderSingleListing();
