@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Publicar anuncio | Gear México</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -14,121 +14,170 @@
 
   <header class="site-header">
     <div class="container header-inner">
-
       <div>
         <h1>
           <a href="index.html" class="logo-link">
-            <h1>
-  <a href="index.html" class="logo-link">
-    <span>Gear</span> México
-  </a>
-</h1>
+            <span>Gear</span> México
           </a>
         </h1>
-
         <p>Publica tu gear musical en México</p>
       </div>
 
-      <a href="index.html" class="post-btn">
-        Volver al inicio
-      </a>
-
+      <a href="index.html" class="post-btn">Volver al inicio</a>
     </div>
   </header>
 
   <main class="container">
-
     <section class="publish-box">
-
       <h2>Publicar anuncio</h2>
 
       <p class="publish-text">
-        Estamos preparando la versión donde podrás publicar directamente.
-        Por ahora este formulario funciona como demostración visual.
+        Llena los datos de tu artículo. Puedes subir hasta 5 fotos.
       </p>
 
-      <form class="publish-form">
+      <form class="publish-form" id="publishForm">
 
         <div class="form-group">
           <label>Título del anuncio</label>
-          <input
-            type="text"
-            placeholder="Ej. Charvel Fusion Special MIJ 1990"
-          >
+          <input id="title" type="text" required placeholder="Ej. Charvel Fusion Special MIJ 1990">
         </div>
 
         <div class="form-row">
-
           <div class="form-group">
             <label>Precio</label>
-            <input
-              type="number"
-              placeholder="22000"
-            >
+            <input id="price" type="number" required placeholder="22000">
           </div>
 
           <div class="form-group">
             <label>Categoría</label>
-
-            <select>
-              <option>Guitarras</option>
-              <option>Bajos</option>
-              <option>Amplificadores</option>
-              <option>Pedales</option>
-              <option>Partes</option>
+            <select id="category" required>
+              <option value="Guitarras">Guitarras</option>
+              <option value="Bajos">Bajos</option>
+              <option value="Amplificadores">Amplificadores</option>
+              <option value="Pedales">Pedales</option>
+              <option value="Partes">Partes</option>
             </select>
           </div>
-
         </div>
 
         <div class="form-group">
           <label>Ubicación</label>
-
-          <input
-            type="text"
-            placeholder="Monterrey, Nuevo León"
-          >
+          <input id="city" type="text" required placeholder="Monterrey, Nuevo León">
         </div>
 
         <div class="form-group">
           <label>Descripción</label>
-
-          <textarea
-            placeholder="Describe condición, modificaciones, detalles importantes..."
-          ></textarea>
+          <textarea id="description" required placeholder="Describe condición, modificaciones, detalles importantes..."></textarea>
         </div>
 
         <div class="form-group">
-          <label>Fotos</label>
-
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-          >
+          <label>Tu nombre o contacto</label>
+          <input id="contactName" type="text" required placeholder="Ej. Marco">
         </div>
 
         <div class="form-group">
-          <label>Facebook / Marketplace / Instagram / WhatsApp</label>
-
-          <input
-            type="text"
-            placeholder="https://..."
-          >
+          <label>Link de contacto</label>
+          <input id="contactLink" type="url" required placeholder="Facebook, Instagram, WhatsApp, Marketplace...">
         </div>
 
-        <button
-          type="button"
-          class="publish-submit"
-        >
+        <div class="form-group">
+          <label>Fotos del artículo</label>
+          <input id="photos" type="file" multiple accept="image/*" required>
+        </div>
+
+        <button type="submit" class="publish-submit" id="submitBtn">
           Publicar anuncio
         </button>
 
+        <p id="formMessage" class="publish-text"></p>
+
       </form>
-
     </section>
-
   </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL = "https://rznofcaveoneeixyulxy.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_Qdj2WyKAkw-pDOQUwHTCbQ_tNwwWPVC";
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const form = document.getElementById("publishForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const formMessage = document.getElementById("formMessage");
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Publicando...";
+      formMessage.textContent = "";
+
+      try {
+        const files = Array.from(document.getElementById("photos").files).slice(0, 5);
+
+        if (files.length === 0) {
+          throw new Error("Sube al menos una foto.");
+        }
+
+        const imageUrls = [];
+
+        for (const file of files) {
+          const fileExt = file.name.split(".").pop();
+          const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+          const filePath = `listings/${fileName}`;
+
+          const { error: uploadError } = await supabaseClient.storage
+            .from("listing-images")
+            .upload(filePath, file);
+
+          if (uploadError) {
+            throw uploadError;
+          }
+
+          const { data } = supabaseClient.storage
+            .from("listing-images")
+            .getPublicUrl(filePath);
+
+          imageUrls.push(data.publicUrl);
+        }
+
+        const newListing = {
+          title: document.getElementById("title").value.trim(),
+          price: Number(document.getElementById("price").value),
+          city: document.getElementById("city").value.trim(),
+          category: document.getElementById("category").value,
+          description: document.getElementById("description").value.trim(),
+          contact_name: document.getElementById("contactName").value.trim(),
+          contact_link: document.getElementById("contactLink").value.trim(),
+          image_1: imageUrls[0] || null,
+          image_2: imageUrls[1] || null,
+          image_3: imageUrls[2] || null,
+          image_4: imageUrls[3] || null,
+          image_5: imageUrls[4] || null
+        };
+
+        const { error: insertError } = await supabaseClient
+          .from("listings")
+          .insert([newListing]);
+
+        if (insertError) {
+          throw insertError;
+        }
+
+        form.reset();
+        formMessage.textContent = "✅ Anuncio publicado correctamente.";
+        submitBtn.textContent = "Publicado";
+
+      } catch (error) {
+        console.error(error);
+        formMessage.textContent = "❌ Error: " + error.message;
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Publicar anuncio";
+      }
+    });
+  </script>
 
 </body>
 </html>
