@@ -1,6 +1,7 @@
 // Demo listings (fallback)
 const demoListings = [
   {
+    id: "demo-0",
     title: "Charvel Fusion Special MIJ 1990",
     category: "Guitarras",
     brand: "Charvel",
@@ -15,6 +16,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-1",
     title: "Ibanez RG550 Verde Neon",
     category: "Guitarras",
     brand: "Ibanez",
@@ -29,6 +31,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-2",
     title: "Jackson Soloist Azul Metálica",
     category: "Guitarras",
     brand: "Jackson",
@@ -43,6 +46,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-3",
     title: "ESP LTD MH Morada",
     category: "Guitarras",
     brand: "ESP",
@@ -57,6 +61,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-4",
     title: "Charvel San Dimas Bubblegum Pink",
     category: "Guitarras",
     brand: "Charvel",
@@ -71,6 +76,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-5",
     title: "Marshall JCM2000 DSL",
     category: "Amplificadores",
     brand: "Marshall",
@@ -85,6 +91,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-6",
     title: "Mesa Boogie Dual Rectifier",
     category: "Amplificadores",
     brand: "Mesa Boogie",
@@ -99,6 +106,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-7",
     title: "EVH 5150 III",
     category: "Amplificadores",
     brand: "EVH",
@@ -113,6 +121,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-8",
     title: "Orange Rockerverb",
     category: "Amplificadores",
     brand: "Orange",
@@ -127,6 +136,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-9",
     title: "Boss SD-1 Super OverDrive",
     category: "Pedales",
     brand: "Boss",
@@ -141,6 +151,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-10",
     title: "Ibanez Tube Screamer",
     category: "Pedales",
     brand: "Ibanez",
@@ -155,6 +166,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-11",
     title: "Boss Chorus Ensemble",
     category: "Pedales",
     brand: "Boss",
@@ -169,6 +181,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-12",
     title: "MXR Phase 90",
     category: "Pedales",
     brand: "MXR",
@@ -183,6 +196,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-13",
     title: "ProCo RAT Distortion",
     category: "Pedales",
     brand: "ProCo",
@@ -197,6 +211,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-14",
     title: "Floyd Rose Gold",
     category: "Partes",
     brand: "Floyd Rose",
@@ -211,6 +226,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-15",
     title: "Seymour Duncan JB",
     category: "Partes",
     brand: "Seymour Duncan",
@@ -225,6 +241,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-16",
     title: "DiMarzio Super Distortion",
     category: "Partes",
     brand: "DiMarzio",
@@ -239,6 +256,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-17",
     title: "EVH D-Tuna",
     category: "Partes",
     brand: "EVH",
@@ -253,6 +271,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-18",
     title: "Music Man StingRay",
     category: "Bajos",
     brand: "Music Man",
@@ -267,6 +286,7 @@ const demoListings = [
     gallery: []
   },
   {
+    id: "demo-19",
     title: "Fender Jazz Bass",
     category: "Bajos",
     brand: "Fender",
@@ -361,6 +381,7 @@ async function loadListingsFromSupabase() {
       if (item.image_5) galleryImages.push(item.image_5);
 
       return {
+        id: item.id.toString(),
         title: item.title,
         category: item.category,
         brand: item.title.split(' ')[0], // Extract first word as brand approximation
@@ -606,12 +627,10 @@ function renderListings(data) {
 
   // Render items for current page
   pageItems.forEach((item, pageIndex) => {
-    const originalIndex = listings.indexOf(item);
-
     const card = document.createElement("div");
     card.className = "card clickable-card";
     card.onclick = function () {
-      window.location.href = `anuncio.html?id=${originalIndex}`;
+      window.location.href = `anuncio.html?id=${item.id}`;
     };
 
     card.innerHTML = `
@@ -662,8 +681,8 @@ function renderSingleListing() {
   if (!singleListing) return;
 
   const params = new URLSearchParams(window.location.search);
-  const id = parseInt(params.get("id"));
-  const item = listings[id];
+  const requestedId = params.get("id");
+  const item = listings.find(listing => listing.id === requestedId);
 
   if (!item) {
     singleListing.innerHTML = `<div class="empty">No se encontró este anuncio.</div>`;
