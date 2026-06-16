@@ -1,4 +1,5 @@
-const listings = [
+// Demo listings (fallback)
+const demoListings = [
   {
     title: "Charvel Fusion Special MIJ 1990",
     category: "Guitarras",
@@ -10,7 +11,8 @@ const listings = [
     image: "images/charvel-fusion-red.png",
     description: "Charvel Fusion estilo noventero, configuración shred, tremolo tipo Floyd y look rojo clásico. Anuncio demo para probar la plataforma.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Ibanez RG550 Verde Neon",
@@ -23,7 +25,8 @@ const listings = [
     image: "images/ibanez-rg550-green.png",
     description: "Ibanez RG estilo shred, color verde llamativo, perfecta para probar cómo se vería una publicación de guitarra.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Jackson Soloist Azul Metálica",
@@ -36,7 +39,8 @@ const listings = [
     image: "images/jackson-soloist-blue.png",
     description: "Jackson Soloist demo con acabado azul metálico, estilo metal moderno.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "ESP LTD MH Morada",
@@ -49,7 +53,8 @@ const listings = [
     image: "images/esp-mh-purple.png",
     description: "ESP LTD estilo superstrat, acabado morado. Anuncio demo para probar imagen, precio y contacto.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Charvel San Dimas Bubblegum Pink",
@@ -62,7 +67,8 @@ const listings = [
     image: "images/charvel-san-dimas-pink.png",
     description: "Charvel San Dimas estilo ochentero en rosa bubblegum. Demo visual para Gear México.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Marshall JCM2000 DSL",
@@ -75,7 +81,8 @@ const listings = [
     image: "images/marshall-jcm2000.png",
     description: "Cabezal Marshall JCM2000 demo. Ideal para probar publicaciones de amplificadores.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Mesa Boogie Dual Rectifier",
@@ -88,7 +95,8 @@ const listings = [
     image: "images/mesa-dual-rectifier.png",
     description: "Dual Rectifier demo para sonidos high gain. Publicación de prueba.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "EVH 5150 III",
@@ -101,7 +109,8 @@ const listings = [
     image: "images/5150-iii.png",
     description: "EVH 5150 III demo para sección de amplificadores high gain.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Orange Rockerverb",
@@ -114,7 +123,8 @@ const listings = [
     image: "images/orange-rockerverb.png",
     description: "Orange Rockerverb demo. Prueba de publicación para amplificador boutique.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Boss SD-1 Super OverDrive",
@@ -127,7 +137,8 @@ const listings = [
     image: "images/boss-sd1.png",
     description: "Boss SD-1 demo para probar publicaciones de pedales.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Ibanez Tube Screamer",
@@ -140,7 +151,8 @@ const listings = [
     image: "images/tube-screamer.png",
     description: "Tube Screamer demo, pedal clásico para overdrive.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Boss Chorus Ensemble",
@@ -153,7 +165,8 @@ const listings = [
     image: "images/boss-chorus.png",
     description: "Boss Chorus demo para sección de efectos.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "MXR Phase 90",
@@ -166,7 +179,8 @@ const listings = [
     image: "images/mxr-phase90.png",
     description: "MXR Phase 90 demo para probar anuncios de pedales compactos.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "ProCo RAT Distortion",
@@ -179,7 +193,8 @@ const listings = [
     image: "images/proco-rat.png",
     description: "ProCo RAT demo para sonidos distorsionados clásicos.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Floyd Rose Gold",
@@ -192,7 +207,8 @@ const listings = [
     image: "images/floyd-rose-gold.png",
     description: "Puente estilo Floyd Rose dorado. Demo para probar sección de partes.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Seymour Duncan JB",
@@ -205,7 +221,8 @@ const listings = [
     image: "images/seymour-duncan-jb.png",
     description: "Pickup Seymour Duncan JB demo para categoría de partes.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "DiMarzio Super Distortion",
@@ -218,7 +235,8 @@ const listings = [
     image: "images/dimarzio-super-distortion.png",
     description: "Pickup DiMarzio Super Distortion demo.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "EVH D-Tuna",
@@ -231,7 +249,8 @@ const listings = [
     image: "images/evh-d-tuna.png",
     description: "EVH D-Tuna demo para accesorios y partes.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Music Man StingRay",
@@ -244,7 +263,8 @@ const listings = [
     image: "images/musicman-stingray.png",
     description: "Music Man StingRay demo para categoría de bajos.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   },
   {
     title: "Fender Jazz Bass",
@@ -257,9 +277,13 @@ const listings = [
     image: "images/fender-jazz-bass.png",
     description: "Fender Jazz Bass demo para probar anuncios de bajos.",
     facebook: "https://facebook.com",
-    marketplace: "https://facebook.com/marketplace"
+    marketplace: "https://facebook.com/marketplace",
+    gallery: []
   }
 ];
+
+// Runtime listings array (will be populated from Supabase or fallback to demo)
+let listings = [];
 
 const listingsGrid = document.getElementById("listingsGrid");
 const searchInput = document.getElementById("searchInput");
@@ -278,6 +302,87 @@ let modalGalleryImages = [];
 let modalCurrentIndex = 0;
 let touchStartX = 0;
 let touchEndX = 0;
+
+// Supabase configuration
+const SUPABASE_URL = "https://rznofcaveoneeixyulxy.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Qdj2WyKAkw-pDOQUwHTCbQ_tNwwWPVC";
+let supabaseClient = null;
+
+// Initialize Supabase and load listings
+async function initializeApp() {
+  try {
+    // Load Supabase library dynamically
+    if (typeof supabase === 'undefined') {
+      console.warn('Supabase library not loaded, using demo listings');
+      listings = demoListings;
+    } else {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      await loadListingsFromSupabase();
+    }
+  } catch (error) {
+    console.warn('Error initializing Supabase, falling back to demo listings:', error);
+    listings = demoListings;
+  }
+
+  // Render initial listings and single listing if needed
+  renderListings(listings);
+  renderSingleListing();
+}
+
+// Load listings from Supabase
+async function loadListingsFromSupabase() {
+  try {
+    if (!supabaseClient) return;
+
+    const { data, error } = await supabaseClient
+      .from("listings")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.warn('Supabase fetch error:', error);
+      throw error;
+    }
+
+    if (!data || data.length === 0) {
+      console.warn('No listings found in Supabase, using demo listings');
+      listings = demoListings;
+      return;
+    }
+
+    // Transform Supabase data to app format
+    listings = data.map(item => {
+      // Collect gallery images from image_1 through image_5
+      const galleryImages = [];
+      if (item.image_1) galleryImages.push(item.image_1);
+      if (item.image_2) galleryImages.push(item.image_2);
+      if (item.image_3) galleryImages.push(item.image_3);
+      if (item.image_4) galleryImages.push(item.image_4);
+      if (item.image_5) galleryImages.push(item.image_5);
+
+      return {
+        title: item.title,
+        category: item.category,
+        brand: item.title.split(' ')[0], // Extract first word as brand approximation
+        price: item.price,
+        state: item.city ? item.city.split(',').pop().trim() : "Desconocido",
+        location: item.city,
+        condition: "Disponible",
+        image: item.image_1 || "",
+        description: item.description,
+        facebook: item.contact_link || "",
+        marketplace: item.contact_link || "",
+        contact_name: item.contact_name,
+        gallery: galleryImages
+      };
+    });
+
+    console.log('Loaded', listings.length, 'listings from Supabase');
+  } catch (error) {
+    console.warn('Error loading listings from Supabase, falling back to demo:', error);
+    listings = demoListings;
+  }
+}
 
 function getExtraImages(baseImage) {
   const dotIndex = baseImage.lastIndexOf(".");
@@ -500,7 +605,7 @@ function renderListings(data) {
   const pageItems = finalData.slice(startIndex, endIndex);
 
   // Render items for current page
-  pageItems.forEach(item => {
+  pageItems.forEach((item, pageIndex) => {
     const originalIndex = listings.indexOf(item);
 
     const card = document.createElement("div");
@@ -565,7 +670,10 @@ function renderSingleListing() {
     return;
   }
 
-  const galleryImages = getExtraImages(item.image);
+  // Use gallery from Supabase or generate from base image
+  const galleryImages = item.gallery && item.gallery.length > 0 
+    ? item.gallery 
+    : getExtraImages(item.image);
 
   singleListing.innerHTML = `
     <div class="card single-card">
@@ -596,7 +704,7 @@ function renderSingleListing() {
 
         <br>
 
-        <a href="${item.facebook}" target="_blank">Contactar en Facebook</a>
+        <a href="${item.facebook}" target="_blank">Contactar: ${item.contact_name || 'Vendedor'}</a>
         <a href="${item.marketplace}" target="_blank">Ver publicación original</a>
       </div>
     </div>
@@ -676,5 +784,5 @@ if (sortFilter) {
   });
 }
 
-renderListings(listings);
-renderSingleListing();
+// Initialize the app
+initializeApp();
