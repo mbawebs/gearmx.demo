@@ -93,9 +93,25 @@
           Guardar cambios
         </button>
 
-        <button type="button" class="publish-submit" id="deleteBtn" style="background:#b00020;">
-          Ocultar anuncio
-        </button>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="publish-submit" id="soldBtn" style="background:#444; flex:1;">
+            Marcar como vendido
+          </button>
+
+          <button type="button" class="publish-submit" id="activeBtn" style="background:#5B2A86; flex:1;">
+            Reactivar anuncio
+          </button>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="publish-submit" id="hideBtn" style="background:#b26a00; flex:1;">
+            Ocultar anuncio
+          </button>
+
+          <button type="button" class="publish-submit" id="deleteBtn" style="background:#b00020; flex:1;">
+            Eliminar definitivamente
+          </button>
+        </div>
 
         <p id="formMessage" class="publish-text"></p>
 
@@ -118,7 +134,11 @@
     const editStatus = document.getElementById("editStatus");
     const editForm = document.getElementById("editForm");
     const formMessage = document.getElementById("formMessage");
+
     const saveBtn = document.getElementById("saveBtn");
+    const soldBtn = document.getElementById("soldBtn");
+    const activeBtn = document.getElementById("activeBtn");
+    const hideBtn = document.getElementById("hideBtn");
     const deleteBtn = document.getElementById("deleteBtn");
 
     let currentListing = null;
@@ -156,12 +176,40 @@
       editForm.style.display = "flex";
     }
 
+    async function updateListing(updates, successMessage) {
+      formMessage.textContent = "";
+
+      const { error } = await supabaseClient
+        .from("listings")
+        .update(updates)
+        .eq("id", listingId)
+        .eq("edit_token", editToken);
+
+      if (error) {
+        throw error;
+      }
+
+      if (updates.status) {
+        document.getElementById("status").value = updates.status;
+      }
+
+      formMessage.innerHTML = `
+        ✅ ${successMessage}
+        <br><br>
+        <a class="post-btn" href="anuncio.html?id=${listingId}">
+          Ver anuncio
+        </a>
+        <a class="post-btn" href="index.html" style="margin-left:8px;">
+          Volver al inicio
+        </a>
+      `;
+    }
+
     editForm.addEventListener("submit", async function (event) {
       event.preventDefault();
 
       saveBtn.disabled = true;
       saveBtn.textContent = "Guardando...";
-      formMessage.textContent = "";
 
       try {
         const updates = {
@@ -175,26 +223,7 @@
           status: document.getElementById("status").value
         };
 
-        const { error } = await supabaseClient
-          .from("listings")
-          .update(updates)
-          .eq("id", listingId)
-          .eq("edit_token", editToken);
-
-        if (error) {
-          throw error;
-        }
-
-        formMessage.innerHTML = `
-          ✅ Cambios guardados correctamente.
-          <br><br>
-          <a class="post-btn" href="anuncio.html?id=${listingId}">
-            Ver anuncio
-          </a>
-          <a class="post-btn" href="index.html" style="margin-left:8px;">
-            Volver al inicio
-          </a>
-        `;
+        await updateListing(updates, "Cambios guardados correctamente.");
 
         saveBtn.textContent = "Guardar cambios";
         saveBtn.disabled = false;
@@ -207,36 +236,95 @@
       }
     });
 
-    deleteBtn.addEventListener("click", async function () {
-      const confirmHide = confirm("¿Seguro que quieres ocultar este anuncio? Ya no aparecerá en Gear México.");
+    soldBtn.addEventListener("click", async function () {
+      const confirmSold = confirm("¿Marcar este anuncio como vendido? Seguirá visible, pero aparecerá como VENDIDO.");
+
+      if (!confirmSold) return;
+
+      soldBtn.disabled = true;
+      soldBtn.textContent = "Marcando...";
+
+      try {
+        await updateListing({ status: "sold" }, "Anuncio marcado como vendido.");
+        soldBtn.textContent = "Marcar como vendido";
+        soldBtn.disabled = false;
+      } catch (error) {
+        formMessage.textContent = "❌ Error: " + error.message;
+        soldBtn.textContent = "Marcar como vendido";
+        soldBtn.disabled = false;
+      }
+    });
+
+    activeBtn.addEventListener("click", async function () {
+      const confirmActive = confirm("¿Reactivar este anuncio? Volverá a aparecer como disponible.");
+
+      if (!confirmActive) return;
+
+      activeBtn.disabled = true;
+      activeBtn.textContent = "Reactivando...";
+
+      try {
+        await updateListing({ status: "active" }, "Anuncio reactivado correctamente.");
+        activeBtn.textContent = "Reactivar anuncio";
+        activeBtn.disabled = false;
+      } catch (error) {
+        formMessage.textContent = "❌ Error: " + error.message;
+        activeBtn.textContent = "Reactivar anuncio";
+        activeBtn.disabled = false;
+      }
+    });
+
+    hideBtn.addEventListener("click", async function () {
+      const confirmHide = confirm("¿Ocultar este anuncio? Ya no aparecerá en Gear México.");
 
       if (!confirmHide) return;
 
+      hideBtn.disabled = true;
+      hideBtn.textContent = "Ocultando...";
+
+      try {
+        await updateListing({ status: "hidden" }, "Anuncio ocultado correctamente.");
+        hideBtn.textContent = "Ocultar anuncio";
+        hideBtn.disabled = false;
+      } catch (error) {
+        formMessage.textContent = "❌ Error: " + error.message;
+        hideBtn.textContent = "Ocultar anuncio";
+        hideBtn.disabled = false;
+      }
+    });
+
+    deleteBtn.addEventListener("click", async function () {
+      const confirmDelete = confirm("¿Seguro que quieres eliminar definitivamente este anuncio? Esta acción no se puede deshacer.");
+
+      if (!confirmDelete) return;
+
+      const confirmDeleteAgain = confirm("Última confirmación: ¿eliminar para siempre este anuncio?");
+
+      if (!confirmDeleteAgain) return;
+
       deleteBtn.disabled = true;
-      deleteBtn.textContent = "Ocultando...";
+      deleteBtn.textContent = "Eliminando...";
 
       const { error } = await supabaseClient
         .from("listings")
-        .update({ status: "hidden" })
+        .delete()
         .eq("id", listingId)
         .eq("edit_token", editToken);
 
       if (error) {
         formMessage.textContent = "❌ Error: " + error.message;
+        deleteBtn.textContent = "Eliminar definitivamente";
         deleteBtn.disabled = false;
-        deleteBtn.textContent = "Ocultar anuncio";
         return;
       }
 
-      document.getElementById("status").value = "hidden";
+      editForm.style.display = "none";
+
+      editStatus.textContent = "✅ Anuncio eliminado definitivamente.";
 
       formMessage.innerHTML = `
-        ✅ Anuncio ocultado correctamente.
-        <br><br>
         <a class="post-btn" href="index.html">Volver al inicio</a>
       `;
-
-      deleteBtn.textContent = "Anuncio oculto";
     });
 
     loadListing();
