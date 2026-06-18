@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editar anuncio | Gear México</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="top-ad">
+    ANUNCIA TU NEGOCIO AQUÍ · Luthiers · Tiendas · Clases · Gear
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div>
+        <h1>
+          <a href="index.html" class="logo-link">
+            <span>Gear</span> México
+          </a>
+        </h1>
+        <p>Edita, marca vendido u oculta tu anuncio</p>
+      </div>
+
+      <a href="index.html" class="post-btn">Volver al inicio</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="publish-box">
+      <h2>Editar anuncio</h2>
+
+      <p id="editStatus" class="publish-text">
+        Cargando anuncio...
+      </p>
+
+      <form class="publish-form" id="editForm" style="display:none;">
+
+        <div class="form-group">
+          <label>Título del anuncio</label>
+          <input id="title" type="text" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Precio</label>
+            <input id="price" type="number" required>
+          </div>
+
+          <div class="form-group">
+            <label>Categoría</label>
+            <select id="category" required>
+              <option value="Guitarras">Guitarras</option>
+              <option value="Bajos">Bajos</option>
+              <option value="Amplificadores">Amplificadores</option>
+              <option value="Pedales">Pedales</option>
+              <option value="Partes">Partes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Ubicación</label>
+          <input id="city" type="text" required>
+        </div>
+
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea id="description" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Tu nombre o contacto</label>
+          <input id="contactName" type="text" required>
+        </div>
+
+        <div class="form-group">
+          <label>Link de contacto</label>
+          <input id="contactLink" type="url" required>
+        </div>
+
+        <div class="form-group">
+          <label>Estado del anuncio</label>
+          <select id="status" required>
+            <option value="active">Activo</option>
+            <option value="sold">Vendido</option>
+            <option value="hidden">Oculto</option>
+          </select>
+        </div>
+
+        <button type="submit" class="publish-submit" id="saveBtn">
+          Guardar cambios
+        </button>
+
+        <button type="button" class="publish-submit" id="deleteBtn" style="background:#b00020;">
+          Ocultar anuncio
+        </button>
+
+        <p id="formMessage" class="publish-text"></p>
+
+      </form>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL = "https://rznofcaveoneeixyulxy.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_Qdj2WyKAkw-pDOQUwHTCbQ_tNwwWPVC";
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const params = new URLSearchParams(window.location.search);
+    const listingId = params.get("id");
+    const editToken = params.get("token");
+
+    const editStatus = document.getElementById("editStatus");
+    const editForm = document.getElementById("editForm");
+    const formMessage = document.getElementById("formMessage");
+    const saveBtn = document.getElementById("saveBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
+
+    let currentListing = null;
+
+    async function loadListing() {
+      if (!listingId || !editToken) {
+        editStatus.textContent = "❌ Link inválido. Falta id o token.";
+        return;
+      }
+
+      const { data, error } = await supabaseClient
+        .from("listings")
+        .select("*")
+        .eq("id", listingId)
+        .eq("edit_token", editToken)
+        .single();
+
+      if (error || !data) {
+        editStatus.textContent = "❌ No se encontró el anuncio o el link secreto no es válido.";
+        return;
+      }
+
+      currentListing = data;
+
+      document.getElementById("title").value = data.title || "";
+      document.getElementById("price").value = data.price || "";
+      document.getElementById("category").value = data.category || "Guitarras";
+      document.getElementById("city").value = data.city || "";
+      document.getElementById("description").value = data.description || "";
+      document.getElementById("contactName").value = data.contact_name || "";
+      document.getElementById("contactLink").value = data.contact_link || "";
+      document.getElementById("status").value = data.status || "active";
+
+      editStatus.textContent = "✅ Anuncio cargado. Ya puedes editarlo.";
+      editForm.style.display = "flex";
+    }
+
+    editForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      saveBtn.disabled = true;
+      saveBtn.textContent = "Guardando...";
+      formMessage.textContent = "";
+
+      try {
+        const updates = {
+          title: document.getElementById("title").value.trim(),
+          price: Number(document.getElementById("price").value),
+          city: document.getElementById("city").value.trim(),
+          category: document.getElementById("category").value,
+          description: document.getElementById("description").value.trim(),
+          contact_name: document.getElementById("contactName").value.trim(),
+          contact_link: document.getElementById("contactLink").value.trim(),
+          status: document.getElementById("status").value
+        };
+
+        const { error } = await supabaseClient
+          .from("listings")
+          .update(updates)
+          .eq("id", listingId)
+          .eq("edit_token", editToken);
+
+        if (error) {
+          throw error;
+        }
+
+        formMessage.innerHTML = `
+          ✅ Cambios guardados correctamente.
+          <br><br>
+          <a class="post-btn" href="anuncio.html?id=${listingId}">
+            Ver anuncio
+          </a>
+          <a class="post-btn" href="index.html" style="margin-left:8px;">
+            Volver al inicio
+          </a>
+        `;
+
+        saveBtn.textContent = "Guardar cambios";
+        saveBtn.disabled = false;
+
+      } catch (error) {
+        console.error(error);
+        formMessage.textContent = "❌ Error: " + error.message;
+        saveBtn.textContent = "Guardar cambios";
+        saveBtn.disabled = false;
+      }
+    });
+
+    deleteBtn.addEventListener("click", async function () {
+      const confirmHide = confirm("¿Seguro que quieres ocultar este anuncio? Ya no aparecerá en Gear México.");
+
+      if (!confirmHide) return;
+
+      deleteBtn.disabled = true;
+      deleteBtn.textContent = "Ocultando...";
+
+      const { error } = await supabaseClient
+        .from("listings")
+        .update({ status: "hidden" })
+        .eq("id", listingId)
+        .eq("edit_token", editToken);
+
+      if (error) {
+        formMessage.textContent = "❌ Error: " + error.message;
+        deleteBtn.disabled = false;
+        deleteBtn.textContent = "Ocultar anuncio";
+        return;
+      }
+
+      document.getElementById("status").value = "hidden";
+
+      formMessage.innerHTML = `
+        ✅ Anuncio ocultado correctamente.
+        <br><br>
+        <a class="post-btn" href="index.html">Volver al inicio</a>
+      `;
+
+      deleteBtn.textContent = "Anuncio oculto";
+    });
+
+    loadListing();
+  </script>
+
+</body>
+</html>
