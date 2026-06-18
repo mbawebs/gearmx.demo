@@ -107,6 +107,23 @@
     const submitBtn = document.getElementById("submitBtn");
     const formMessage = document.getElementById("formMessage");
 
+    async function copyEditLink(editUrl) {
+      try {
+        await navigator.clipboard.writeText(editUrl);
+        const copyStatus = document.getElementById("copyStatus");
+        if (copyStatus) {
+          copyStatus.textContent = "✅ Link copiado. Guárdalo en tus notas, WhatsApp o correo.";
+        }
+      } catch (error) {
+        const copyStatus = document.getElementById("copyStatus");
+        if (copyStatus) {
+          copyStatus.textContent = "Copia manualmente el link de la caja de texto.";
+        }
+      }
+    }
+
+    window.copyEditLink = copyEditLink;
+
     form.addEventListener("submit", async function (event) {
       event.preventDefault();
 
@@ -173,19 +190,45 @@
         }
 
         const editUrl = `${window.location.origin}${window.location.pathname.replace("publicar.html", "editar.html")}?id=${insertedListing.id}&token=${editToken}`;
+        const viewUrl = `anuncio.html?id=${insertedListing.id}`;
+        const emailSubject = encodeURIComponent("Mi link para editar anuncio en Gear México");
+        const emailBody = encodeURIComponent(`Guarda este link para editar, bajar precio, marcar vendido u ocultar tu anuncio:\n\n${editUrl}`);
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(editUrl)}`;
 
         form.reset();
 
         formMessage.innerHTML = `
-          ✅ Anuncio publicado correctamente.
-          <br><br>
+          <div style="background:#fff3cd; border:2px solid #ffcc00; border-radius:12px; padding:18px; margin-top:18px;">
+            <h2 style="color:#5B2A86; margin-bottom:10px;">⚠️ IMPORTANTE: guarda tu link de edición</h2>
 
-          <strong>Guarda este link secreto para editar tu anuncio:</strong>
+            <p style="font-size:16px; line-height:1.5; color:#222;">
+              Este es el <strong>ÚNICO link</strong> para editar precio, cambiar descripción,
+              marcar como vendido u ocultar tu anuncio.
+              <br><br>
+              <strong>Si lo pierdes, no podrás administrar esta publicación.</strong>
+            </p>
+
+            <input value="${editUrl}" readonly style="width:100%; padding:12px; margin:14px 0; border:1px solid #ccc; border-radius:8px; font-size:14px;">
+
+            <button type="button" class="post-btn" onclick="copyEditLink('${editUrl}')">
+              Copiar link de edición
+            </button>
+
+            <a class="post-btn" href="mailto:?subject=${emailSubject}&body=${emailBody}" style="margin-left:8px;">
+              Enviarme por correo
+            </a>
+
+            <p id="copyStatus" style="margin-top:12px; font-weight:bold; color:#5B2A86;"></p>
+
+            <div style="margin-top:18px; text-align:center;">
+              <p style="font-weight:bold; margin-bottom:10px;">También puedes guardar este QR con screenshot:</p>
+              <img src="${qrUrl}" alt="QR link de edición" style="width:220px; height:220px; background:white; padding:8px; border-radius:10px;">
+            </div>
+          </div>
+
           <br>
-          <input value="${editUrl}" readonly style="width:100%; padding:12px; margin-top:8px; border:1px solid #ccc; border-radius:8px;">
-          <br><br>
 
-          <a class="post-btn" href="anuncio.html?id=${insertedListing.id}">
+          <a class="post-btn" href="${viewUrl}">
             Ver anuncio
           </a>
 
