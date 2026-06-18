@@ -59,6 +59,7 @@ async function loadListingsFromSupabase() {
       return {
         id: item.id.toString(),
         created_at: item.created_at,
+        views: item.views || 0,
         title: item.title || "Sin título",
         category: item.category || "",
         brand: item.title ? item.title.split(" ")[0] : "",
@@ -108,6 +109,44 @@ function getTimeAgo(dateString) {
 
   const years = Math.floor(days / 365);
   return `Publicado hace ${years} año${years !== 1 ? "s" : ""}`;
+}
+
+function formatViews(views) {
+  const totalViews = Number(views) || 0;
+  return totalViews === 1 ? "1 vista" : `${totalViews.toLocaleString()} vistas`;
+}
+
+async function countListingView(item) {
+  if (!item || !item.id || !supabaseClient) return;
+
+  const storageKey = `gear_mexico_viewed_${item.id}`;
+  const lastViewed = localStorage.getItem(storageKey);
+  const now = Date.now();
+  const twentyFourHours = 24 * 60 * 60 * 1000;
+
+  if (lastViewed && now - Number(lastViewed) < twentyFourHours) {
+    return;
+  }
+
+  const newViews = (Number(item.views) || 0) + 1;
+
+  const { error } = await supabaseClient
+    .from("listings")
+    .update({ views: newViews })
+    .eq("id", item.id);
+
+  if (error) {
+    console.error("Error contando vista:", error);
+    return;
+  }
+
+  item.views = newViews;
+  localStorage.setItem(storageKey, now.toString());
+
+  const viewsElement = document.querySelector(".listing-views");
+  if (viewsElement) {
+    viewsElement.textContent = formatViews(item.views);
+  }
 }
 
 function shareListing(item) {
@@ -335,6 +374,7 @@ function renderListings(data) {
         <p>${item.location}</p>
         <p>${item.condition}</p>
         <p class="listing-age">${getTimeAgo(item.created_at)}</p>
+        <p class="listing-views-card">${formatViews(item.views)}</p>
       </div>
     `;
 
@@ -382,6 +422,8 @@ function renderSingleListing() {
     return;
   }
 
+  countListingView(item);
+
   const soldText = item.status === "sold"
     ? `<div class="sold-banner">VENDIDO</div>`
     : "";
@@ -408,6 +450,7 @@ function renderSingleListing() {
         <h1>${item.title}</h1>
         <p class="price">$${item.price.toLocaleString()} MXN</p>
         <p class="listing-age">${getTimeAgo(item.created_at)}</p>
+        <p class="listing-views">${formatViews(item.views)}</p>
 
         <button class="share-listing-btn" type="button">
           Compartir anuncio
