@@ -45,7 +45,7 @@ async function loadListingsFromSupabase() {
 
     if (error) throw error;
 
-    const visibleData = (data || []).filter(item => item.status !== "hidden");
+    const visibleData = (data || []).filter(item => item.status !== "hidden" && item.status !== "deleted");
 
     listings = visibleData.map(item => {
       const galleryImages = [];
