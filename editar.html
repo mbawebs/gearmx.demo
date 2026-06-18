@@ -180,10 +180,10 @@
       formMessage.textContent = "";
 
       const { error } = await supabaseClient
-        .from("listings")
-        .update(updates)
-        .eq("id", listingId)
-        .eq("edit_token", editToken);
+  .from("listings")
+  .update({ status: "deleted" })
+  .eq("id", listingId)
+  .eq("edit_token", editToken);
 
       if (error) {
         throw error;
