@@ -724,3 +724,10 @@ body {
 .share-listing-btn:hover {
   opacity: 0.85;
 }
+.listing-views,
+.listing-views-card {
+  color: #555;
+  font-size: 0.9rem;
+  margin-top: 4px;
+  font-weight: 700;
+}
