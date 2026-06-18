@@ -172,6 +172,45 @@ function shareListing(item) {
     });
 }
 
+async function reportListing(item) {
+  if (!item || !item.id || !supabaseClient) return;
+
+  const reportKey = `gear_mexico_reported_${item.id}`;
+
+  if (localStorage.getItem(reportKey)) {
+    alert("Ya reportaste este anuncio desde este navegador.");
+    return;
+  }
+
+  const reason = prompt(
+    "Motivo del reporte:\n\nEscribe uno de estos motivos:\n\nFraude\nInformación falsa\nAnuncio duplicado\nProducto prohibido\nOtro"
+  );
+
+  if (!reason || !reason.trim()) return;
+
+  const details = prompt("Detalles opcionales del reporte:") || "";
+
+  const { error } = await supabaseClient
+    .from("reports")
+    .insert([
+      {
+        listing_id: item.id,
+        reason: reason.trim(),
+        details: details.trim(),
+        listing_title: item.title
+      }
+    ]);
+
+  if (error) {
+    console.error("Error enviando reporte:", error);
+    alert("No se pudo enviar el reporte. Intenta de nuevo.");
+    return;
+  }
+
+  localStorage.setItem(reportKey, "1");
+  alert("Reporte enviado. Gracias por ayudar a mantener Gear México seguro.");
+}
+
 function showModalImage() {
   const modal = document.getElementById("imageModal");
   if (!modal) return;
@@ -452,9 +491,19 @@ function renderSingleListing() {
         <p class="listing-age">${getTimeAgo(item.created_at)}</p>
         <p class="listing-views">${formatViews(item.views)}</p>
 
-        <button class="share-listing-btn" type="button">
-          Compartir anuncio
-        </button>
+        <div class="listing-actions">
+          <button class="share-listing-btn" type="button">
+            Compartir
+          </button>
+
+          <button class="report-listing-btn" type="button">
+            Reportar
+          </button>
+
+          <a href="${item.facebook}" target="_blank" class="contact-listing-btn">
+            Contactar vendedor
+          </a>
+        </div>
 
         <p><strong>Ubicación:</strong> ${item.location}</p>
         <p><strong>Categoría:</strong> ${item.category}</p>
@@ -464,20 +513,23 @@ function renderSingleListing() {
         <br>
 
         <p>${item.description}</p>
-
-        <br>
-
-        <a href="${item.facebook}" target="_blank">Contactar: ${item.contact_name || "Vendedor"}</a>
       </div>
     </div>
   `;
 
   const mainImage = singleListing.querySelector(".main-listing-image");
   const shareButton = singleListing.querySelector(".share-listing-btn");
+  const reportButton = singleListing.querySelector(".report-listing-btn");
 
   if (shareButton) {
     shareButton.addEventListener("click", function () {
       shareListing(item);
+    });
+  }
+
+  if (reportButton) {
+    reportButton.addEventListener("click", function () {
+      reportListing(item);
     });
   }
 
