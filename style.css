@@ -773,3 +773,47 @@ body {
 .contact-listing-btn:hover {
   opacity: 0.85;
 }
+.listing-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 16px 0 22px;
+}
+
+.listing-actions button,
+.listing-actions a {
+  min-height: 42px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.listing-actions .share-listing-btn {
+  background: #111;
+  color: #fff;
+  margin: 0;
+}
+
+.listing-actions .report-listing-btn {
+  background: #f1f1f1;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.listing-actions .contact-listing-btn {
+  background: #5B2A86;
+  color: #fff;
+}
+
+.listing-actions button:hover,
+.listing-actions a:hover {
+  opacity: 0.88;
+}
