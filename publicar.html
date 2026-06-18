@@ -158,17 +158,30 @@
           image_5: imageUrls[4] || null
         };
 
-        const { error: insertError } = await supabaseClient
-          .from("listings")
-          .insert([newListing]);
+      const { data: insertedListing, error: insertError } = await supabaseClient
+  .from("listings")
+  .insert([newListing])
+  .select()
+  .single();
 
-        if (insertError) {
-          throw insertError;
-        }
+if (insertError) {
+  throw insertError;
+}
 
-        form.reset();
-        formMessage.textContent = "✅ Anuncio publicado correctamente.";
-        submitBtn.textContent = "Publicado";
+form.reset();
+
+formMessage.innerHTML = `
+  ✅ Anuncio publicado correctamente.
+  <br><br>
+  <a class="post-btn" href="anuncio.html?id=${insertedListing.id}">
+    Ver anuncio
+  </a>
+  <a class="post-btn" href="index.html" style="margin-left:8px;">
+    Volver al inicio
+  </a>
+`;
+
+submitBtn.textContent = "Publicado";
 
       } catch (error) {
         console.error(error);
