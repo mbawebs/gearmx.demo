@@ -704,3 +704,23 @@ body {
   font-size: 22px;
   letter-spacing: 1px;
 }
+.listing-age {
+  color: #777;
+  font-size: 0.9rem;
+  margin-top: 6px;
+}
+
+.share-listing-btn {
+  margin: 12px 0 18px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.share-listing-btn:hover {
+  opacity: 0.85;
+}
