@@ -141,8 +141,6 @@
     const hideBtn = document.getElementById("hideBtn");
     const deleteBtn = document.getElementById("deleteBtn");
 
-    let currentListing = null;
-
     async function loadListing() {
       if (!listingId || !editToken) {
         editStatus.textContent = "❌ Link inválido. Falta id o token.";
@@ -161,7 +159,10 @@
         return;
       }
 
-      currentListing = data;
+      if (data.status === "deleted") {
+        editStatus.textContent = "❌ Este anuncio fue eliminado.";
+        return;
+      }
 
       document.getElementById("title").value = data.title || "";
       document.getElementById("price").value = data.price || "";
@@ -180,10 +181,10 @@
       formMessage.textContent = "";
 
       const { error } = await supabaseClient
-  .from("listings")
-  .update({ status: "deleted" })
-  .eq("id", listingId)
-  .eq("edit_token", editToken);
+        .from("listings")
+        .update(updates)
+        .eq("id", listingId)
+        .eq("edit_token", editToken);
 
       if (error) {
         throw error;
@@ -237,94 +238,74 @@
     });
 
     soldBtn.addEventListener("click", async function () {
-      const confirmSold = confirm("¿Marcar este anuncio como vendido? Seguirá visible, pero aparecerá como VENDIDO.");
-
-      if (!confirmSold) return;
+      if (!confirm("¿Marcar este anuncio como vendido? Seguirá visible, pero aparecerá como VENDIDO.")) return;
 
       soldBtn.disabled = true;
       soldBtn.textContent = "Marcando...";
 
       try {
         await updateListing({ status: "sold" }, "Anuncio marcado como vendido.");
-        soldBtn.textContent = "Marcar como vendido";
-        soldBtn.disabled = false;
       } catch (error) {
         formMessage.textContent = "❌ Error: " + error.message;
-        soldBtn.textContent = "Marcar como vendido";
-        soldBtn.disabled = false;
       }
+
+      soldBtn.textContent = "Marcar como vendido";
+      soldBtn.disabled = false;
     });
 
     activeBtn.addEventListener("click", async function () {
-      const confirmActive = confirm("¿Reactivar este anuncio? Volverá a aparecer como disponible.");
-
-      if (!confirmActive) return;
+      if (!confirm("¿Reactivar este anuncio? Volverá a aparecer como disponible.")) return;
 
       activeBtn.disabled = true;
       activeBtn.textContent = "Reactivando...";
 
       try {
         await updateListing({ status: "active" }, "Anuncio reactivado correctamente.");
-        activeBtn.textContent = "Reactivar anuncio";
-        activeBtn.disabled = false;
       } catch (error) {
         formMessage.textContent = "❌ Error: " + error.message;
-        activeBtn.textContent = "Reactivar anuncio";
-        activeBtn.disabled = false;
       }
+
+      activeBtn.textContent = "Reactivar anuncio";
+      activeBtn.disabled = false;
     });
 
     hideBtn.addEventListener("click", async function () {
-      const confirmHide = confirm("¿Ocultar este anuncio? Ya no aparecerá en Gear México.");
-
-      if (!confirmHide) return;
+      if (!confirm("¿Ocultar este anuncio? Ya no aparecerá en Gear México.")) return;
 
       hideBtn.disabled = true;
       hideBtn.textContent = "Ocultando...";
 
       try {
         await updateListing({ status: "hidden" }, "Anuncio ocultado correctamente.");
-        hideBtn.textContent = "Ocultar anuncio";
-        hideBtn.disabled = false;
       } catch (error) {
         formMessage.textContent = "❌ Error: " + error.message;
-        hideBtn.textContent = "Ocultar anuncio";
-        hideBtn.disabled = false;
       }
+
+      hideBtn.textContent = "Ocultar anuncio";
+      hideBtn.disabled = false;
     });
 
     deleteBtn.addEventListener("click", async function () {
-      const confirmDelete = confirm("¿Seguro que quieres eliminar definitivamente este anuncio? Esta acción no se puede deshacer.");
-
-      if (!confirmDelete) return;
-
-      const confirmDeleteAgain = confirm("Última confirmación: ¿eliminar para siempre este anuncio?");
-
-      if (!confirmDeleteAgain) return;
+      if (!confirm("¿Seguro que quieres eliminar definitivamente este anuncio? Esta acción no se puede deshacer.")) return;
+      if (!confirm("Última confirmación: ¿eliminar para siempre este anuncio?")) return;
 
       deleteBtn.disabled = true;
       deleteBtn.textContent = "Eliminando...";
 
-      const { error } = await supabaseClient
-        .from("listings")
-        .delete()
-        .eq("id", listingId)
-        .eq("edit_token", editToken);
+      try {
+        await updateListing({ status: "deleted" }, "Anuncio eliminado definitivamente.");
 
-      if (error) {
+        editForm.style.display = "none";
+        editStatus.textContent = "✅ Anuncio eliminado definitivamente.";
+
+        formMessage.innerHTML = `
+          <a class="post-btn" href="index.html">Volver al inicio</a>
+        `;
+      } catch (error) {
         formMessage.textContent = "❌ Error: " + error.message;
         deleteBtn.textContent = "Eliminar definitivamente";
         deleteBtn.disabled = false;
-        return;
       }
-
-      editForm.style.display = "none";
-
-      editStatus.textContent = "✅ Anuncio eliminado definitivamente.";
-
-      formMessage.innerHTML = `
-        <a class="post-btn" href="index.html">Volver al inicio</a>
-      `;
     });
 
     loadListing();
