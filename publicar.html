@@ -89,7 +89,7 @@
           Publicar anuncio
         </button>
 
-        <p id="formMessage" class="publish-text"></p>
+        <div id="formMessage" class="publish-text"></div>
 
       </form>
     </section>
@@ -143,6 +143,8 @@
           imageUrls.push(data.publicUrl);
         }
 
+        const editToken = crypto.randomUUID();
+
         const newListing = {
           title: document.getElementById("title").value.trim(),
           price: Number(document.getElementById("price").value),
@@ -155,33 +157,48 @@
           image_2: imageUrls[1] || null,
           image_3: imageUrls[2] || null,
           image_4: imageUrls[3] || null,
-          image_5: imageUrls[4] || null
+          image_5: imageUrls[4] || null,
+          edit_token: editToken,
+          status: "active"
         };
 
-      const { data: insertedListing, error: insertError } = await supabaseClient
-  .from("listings")
-  .insert([newListing])
-  .select()
-  .single();
+        const { data: insertedListing, error: insertError } = await supabaseClient
+          .from("listings")
+          .insert([newListing])
+          .select()
+          .single();
 
-if (insertError) {
-  throw insertError;
-}
+        if (insertError) {
+          throw insertError;
+        }
 
-form.reset();
+        const editUrl = `${window.location.origin}${window.location.pathname.replace("publicar.html", "editar.html")}?id=${insertedListing.id}&token=${editToken}`;
 
-formMessage.innerHTML = `
-  ✅ Anuncio publicado correctamente.
-  <br><br>
-  <a class="post-btn" href="anuncio.html?id=${insertedListing.id}">
-    Ver anuncio
-  </a>
-  <a class="post-btn" href="index.html" style="margin-left:8px;">
-    Volver al inicio
-  </a>
-`;
+        form.reset();
 
-submitBtn.textContent = "Publicado";
+        formMessage.innerHTML = `
+          ✅ Anuncio publicado correctamente.
+          <br><br>
+
+          <strong>Guarda este link secreto para editar tu anuncio:</strong>
+          <br>
+          <input value="${editUrl}" readonly style="width:100%; padding:12px; margin-top:8px; border:1px solid #ccc; border-radius:8px;">
+          <br><br>
+
+          <a class="post-btn" href="anuncio.html?id=${insertedListing.id}">
+            Ver anuncio
+          </a>
+
+          <a class="post-btn" href="${editUrl}" style="margin-left:8px;">
+            Editar anuncio
+          </a>
+
+          <a class="post-btn" href="index.html" style="margin-left:8px;">
+            Volver al inicio
+          </a>
+        `;
+
+        submitBtn.textContent = "Publicado";
 
       } catch (error) {
         console.error(error);
